@@ -14,14 +14,14 @@
 		// Get the inputs from the input field
 		$firstName = $inData["firstName"];
 		$lastName = $inData["lastName"];
-		$username = $inData["username"];
+		$userName = $inData["userName"];
 		$password = $inData["password"];
 
 
 		// Will run a query finding all the matching usernames
-        $sqlQuery = "SELECT Username FROM Users WHERE Username=?";
+        $sqlQuery = "SELECT userName FROM users WHERE userName = ?";
 		$stmt = $conn->prepare($sqlQuery);
-		$stmt->bind_param("s", $username);
+		$stmt->bind_param("s", $userName);
 		$stmt->execute();
 		$result = $stmt->get_result();
 
@@ -33,9 +33,9 @@
 		else
 		{
 			// If the previous statement passed, then add the user to the database
-            $sqlInsert = "INSERT into Users (FirstName, LastName, Username, Password) VALUES (?,?,?,?)";
+            $sqlInsert = "INSERT into users (firstName, lastName, userName, password) VALUES (?,?,?,?)";
 			$stmt = $conn->prepare($sqlInsert);
-			$stmt->bind_param("ssss", $firstName, $lastName, $username, $password);
+			$stmt->bind_param("ssss", $firstName, $lastName, $userName, $password);
 			$stmt->execute();
 
 			returnWithError("");

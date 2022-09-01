@@ -24,7 +24,7 @@
         // The contactId must match to the one that the user was trying to update
         $query = "UPDATE contacts SET firstName=?, lastName=?, email=?, phoneNumber=?, streetAddress=?, city=?, state=?, zip=? WHERE contactId=?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssssssss",$firstName,$lastName,$emailAddress,$phoneNumber,$streetAddress,$city,$state,$zip,$contactId);
+        $stmt->bind_param("sssssssssi", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip, $contactId);
         // Execute the command
         $stmt->execute();
 

@@ -15,15 +15,15 @@
 	else
 	{
         // Get the user inputs from the input field
-		$stmt = $conn->prepare("SELECT ID, FirstName, LastName FROM Users WHERE Login=? AND Password =?");
-		$stmt->bind_param("ss", $inData["Login"], $inData["Password"]);
+		$stmt = $conn->prepare("SELECT ID, firstName, lastName FROM users WHERE username = ? AND password = ?");
+		$stmt->bind_param("ss", $inData["login"], $inData["password"]);
 		$stmt->execute();
 		$result = $stmt->get_result();
 
         // Check if the user already exist in the database
 		if( $row = $result->fetch_assoc()  )
 		{
-			returnWithInfo( $row['FirstName'], $row['LastName'], $row['ID'] );
+			returnWithInfo( $row['firstName'], $row['lastName'], $row['ID'] );
 		}
         // User not found
 		else

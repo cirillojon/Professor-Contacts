@@ -15,12 +15,12 @@
 		// Keeps track of the resultArray index
 		$searchCount = 0;
 
-		// Find contact using their first name or last name
+		// Find contact using their first name or last name (must match their contactId)
 		$query = "SELECT firstName, lastName, email, phoneNumber, streetAddress, city, state, zip 
 				FROM contacts WHERE (firstName LIKE ? OR lastName LIKE ?) AND contactId = ?";
 		// Prepare the query
 		$stmt = $conn->prepare($query);
-		$stmt->bind_param("sss", $firstName, $lastName, $inData["userId"]);
+		$stmt->bind_param("ssi", $firstName, $lastName, $inData["userId"]);
 		// Run the query
         $stmt->execute();
 

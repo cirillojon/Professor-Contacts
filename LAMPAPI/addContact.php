@@ -21,11 +21,11 @@
 		$contactId = $inData["contactId"];
 
 		// Create an insert query that includes the input from the user
-		$sqlInsert = "INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip, contactId) VALUES (?,?,?,?,?,?,?,?,?)";
+		$sqlInsert = "INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES (?,?,?,?,?,?,?,?,?)";
 
         // Insert a new contact to the database
 		$stmt = $conn->prepare($sqlInsert);
-		$stmt->bind_param("sssssssss", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip, $contactId);
+		$stmt->bind_param("ssssssss", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip);
 		$stmt->execute();
 
         // Close the database
