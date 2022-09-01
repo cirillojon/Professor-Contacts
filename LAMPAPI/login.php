@@ -5,7 +5,7 @@
 	$FirstName = "";
 	$LastName = "";
 
-	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
+	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
     
     // Will show an error if unable to connect to the database
 	if( $conn->connect_error )

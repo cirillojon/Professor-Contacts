@@ -2,7 +2,7 @@
 	$inData = getRequestInfo();
 
     // Establish a connection to the database
-	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
+	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
 	if ($conn->connect_error)
 	{
 		returnWithError($conn->connect_error );
