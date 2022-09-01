@@ -1,12 +1,6 @@
 <?php
 	$inData = getRequestInfo();
 
-    // Get the inputs from the input field
-	$firstName = $inData["firstName"];
-	$lastName = $inData["lastName"];
-	$login = $inData["login"];
-	$password = $inData["password"];
-
     // Establish a connection from the database
 	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
 
@@ -17,10 +11,17 @@
 	}
 	else
 	{
-		// Will run a query finding all the matching users
-        $sqlQuery = "SELECT Login FROM Users WHERE Login=?";
+		// Get the inputs from the input field
+		$firstName = $inData["firstName"];
+		$lastName = $inData["lastName"];
+		$username = $inData["username"];
+		$password = $inData["password"];
+
+
+		// Will run a query finding all the matching usernames
+        $sqlQuery = "SELECT Username FROM Users WHERE Username=?";
 		$stmt = $conn->prepare($sqlQuery);
-		$stmt->bind_param("s", $login);
+		$stmt->bind_param("s", $username);
 		$stmt->execute();
 		$result = $stmt->get_result();
 
@@ -32,9 +33,9 @@
 		else
 		{
 			// If the previous statement passed, then add the user to the database
-            $sqlInsert = "INSERT into Users (FirstName,LastName,Login,Password) VALUES (?,?,?,?)";
+            $sqlInsert = "INSERT into Users (FirstName, LastName, Username, Password) VALUES (?,?,?,?)";
 			$stmt = $conn->prepare($sqlInsert);
-			$stmt->bind_param("ssss", $firstName, $lastName, $login, $password);
+			$stmt->bind_param("ssss", $firstName, $lastName, $username, $password);
 			$stmt->execute();
 
 			returnWithError("");
