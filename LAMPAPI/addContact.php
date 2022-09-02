@@ -1,5 +1,15 @@
 <?php
 	$inData = getRequestInfo();
+
+	// Get the data from frontend and store the inputs here
+	$firstName = $inData["firstName"];
+	$lastName = $inData["lastName"];
+	$phoneNumber = $inData["phoneNumber"];
+	$emailAddress = $inData["email"];
+	$streetAddress = $inData["streetAddress"];
+	$city = $inData["city"];
+	$state = $inData["state"];
+	$zip = $inData["zip"];
     
     // Establish a database connection
 	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
@@ -9,30 +19,19 @@
 	}
 	else
 	{
-        // Get the data from frontend and store the inputs here
-		$firstName = $inData["firstName"];
-		$lastName = $inData["lastName"];
-		$phoneNumber = $inData["phoneNumber"];
-		$emailAddress = $inData["emailAddress"];
-		$streetAddress = $inData["streetAddress"];
-		$city = $inData["city"];
-		$state = $inData["state"];
-		$zip = $inData["zip"];
-		$contactId = $inData["contactId"];
-
 		// Create an insert query that includes the input from the user
-		$sqlInsert = "INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES (?,?,?,?,?,?,?,?,?)";
+		$sqlInsert = "INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES (?,?,?,?,?,?,?,?)";
 
         // Insert a new contact to the database
 		$stmt = $conn->prepare($sqlInsert);
 		$stmt->bind_param("ssssssss", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip);
 		$stmt->execute();
 
+		returnWithError("No error, successful");
+
         // Close the database
 		$stmt->close();
 		$conn->close();
-
-		returnWithError("");
 	}
 
 	function getRequestInfo()

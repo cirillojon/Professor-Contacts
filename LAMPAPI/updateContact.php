@@ -1,5 +1,15 @@
 <?php
 	$inData = getRequestInfo();
+    // Get the data from frontend and store the inputs here
+    $firstName = $inData["firstName"];
+    $lastName = $inData["lastName"];
+    $emailAddress = $inData["email"];
+    $phoneNumber = $inData["phoneNumber"];
+    $streetAddress = $inData["streetAddress"];
+    $city = $inData["city"];
+    $state = $inData["state"];
+    $zip = $inData["zip"];
+    $contactId = $inData["contactId"];
 
     // Establish a connection to the database
 	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
@@ -9,22 +19,11 @@
 	}
 	else
 	{
-        // Get the data from frontend and store the inputs here
-        $firstName = $inData["firstName"];
-        $lastName = $inData["lastName"];
-        $emailAddress = $inData["emailAddress"];
-        $phoneNumber = $inData["phoneNumber"];
-        $streetAddress = $inData["streetAddress"];
-        $city = $inData["city"];
-        $state = $inData["state"];
-        $zip = $inData["zip"];
-        $contactId = $inData["contactId"];
-
 		// Fetch the contact from the database then update it using the inputs from the user. 
         // The contactId must match to the one that the user was trying to update
         $query = "UPDATE contacts SET firstName=?, lastName=?, email=?, phoneNumber=?, streetAddress=?, city=?, state=?, zip=? WHERE contactId=?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssssssssi", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip, $contactId);
+        $stmt->bind_param("ssssssssi", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip, $contactId);
         // Execute the command
         $stmt->execute();
 
@@ -32,7 +31,7 @@
         $stmt->close();
         $conn->close();
 
-        returnWithError("");
+        returnWithError("SUCCESSFUL, NO ERRORS");
 	}
 
 	function getRequestInfo()

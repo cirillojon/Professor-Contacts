@@ -1,5 +1,10 @@
 <?php
 	$inData = getRequestInfo();
+	// Get the inputs from the input field
+	$firstName = $inData["firstName"];
+	$lastName = $inData["lastName"];
+	$userName = $inData["userName"];
+	$password = $inData["password"];
 
     // Establish a connection from the database
 	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
@@ -11,16 +16,8 @@
 	}
 	else
 	{
-		// Get the inputs from the input field
-		$firstName = $inData["firstName"];
-		$lastName = $inData["lastName"];
-		$userName = $inData["userName"];
-		$password = $inData["password"];
-
-
 		// Will run a query finding all the matching usernames
-        $sqlQuery = "SELECT userName FROM users WHERE userName = ?";
-		$stmt = $conn->prepare($sqlQuery);
+		$stmt = $conn->prepare("SELECT userName FROM users WHERE userName = ?");
 		$stmt->bind_param("s", $userName);
 		$stmt->execute();
 		$result = $stmt->get_result();
@@ -38,7 +35,7 @@
 			$stmt->bind_param("ssss", $firstName, $lastName, $userName, $password);
 			$stmt->execute();
 
-			returnWithError("");
+			returnWithInfo( $firstName, $lastName, $userName );
 		}
         
 		$stmt->close();
@@ -59,5 +56,11 @@
 	function returnWithError( $err )
 	{
 		$retValue = '{"error":"' . $err . '"}';
+		sendResultInfoAsJson( $retValue );
+	}
+
+	function returnWithInfo( $firstName, $lastName, $userName )
+	{
+		$retValue = '{"userName":' . $userName . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
 		sendResultInfoAsJson( $retValue );
 	}

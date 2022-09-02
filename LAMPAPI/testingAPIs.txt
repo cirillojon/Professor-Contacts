@@ -1,0 +1,63 @@
+// CHECKING LOGIN AND REGISTER
+insert into users (firstName,lastName,userName,password) VALUES ('John','Doe','jdoe','test123');
+insert into users (firstName,lastName,userName,password) VALUES ('Joshua','Samontanez','jsamontanez','testing123');
+
+// ADDING TO CONTACTS
+INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES ('Kanye','West','kwest@gmail.com','123-405-3213','123 Main St.','Orlando','FL','90210')
+INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES ('Dummy','Account','dummy@gmail.com','123-405-3214','124 Main St.','Orlando','FL','90210')
+INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES ('Kanye','East','keast@gmail.com','123-405-3213','125 Main St.','Orlando','FL','90210')
+INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES ('Kanye','North','knorth@gmail.com','123-405-3213','126 Main St.','Orlando','FL','90210')
+INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES ('Kanye','South','ksouth@gmail.com','123-405-3213','127 Main St.','Orlando','FL','90210')
+INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES ('Kid','Cudi','kidcudi@gmail.com','123-405-3213','128 Main St.','Orlando','FL','90210')
+
+{
+    "firstName" : "Dummy",
+    "lastName" : "Test",
+    "email": "dummy123@gmail.com",
+    "phoneNumber" : "123-456-9999",
+    "streetAddress" : "123 Main St.",
+    "city" : "Orlando",
+    "state" : "FL",
+    "zip" : "90210",
+}
+
+// DELETING CONTACTS
+SELECT * FROM contacts WHERE contactID = 1 AND firstName = 'Kanye' AND lastName = 'West';
+DELETE FROM contacts WHERE firstName = 'Kanye' AND lastName = 'West' AND contactId = 1;
+
+SELECT * FROM contacts WHERE contactID = 2 AND firstName = 'Dummy' AND lastName = 'Test';
+
+// SEARCH CONTACTS
+SELECT firstName, lastName, email, phoneNumber, streetAddress, city, state, zip FROM contacts WHERE (firstName LIKE 'Kanye' OR lastName LIKE 'West') AND contactId = 3;
+
+{
+    "search" : "Kanye East",
+    "contactId" : 5
+}
+{
+    "search" : "Dummy Account",
+    "contactId" : 4
+}
+{
+    "search" : "Kanye South",
+    "contactId" : 7
+}
+{
+    "search" : "Kid Cudi",
+    "contactId" : 8
+}
+
+// UPDATE THE CONTACTS
+// CHANGE Dummy -> Yummy (firstName), Also changed ZIP 90210 -> 00000
+{
+    "firstName" : "Yummy",
+    "lastName" : "Test",
+    "email": "dummy123@gmail.com",
+    "phoneNumber" : "123-456-9999",
+    "streetAddress" : "123 Main St.",
+    "city" : "Orlando",
+    "state" : "FL",
+    "zip" : "90210",
+	"contactId" : "4"
+}
+
