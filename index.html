@@ -1,19 +1,20 @@
 <!DOCTYPE html>
+<head>
+    <script type="text/javascript" src="js/code.js"></script>
+</head>
 <html>
     <body>
-        <h1>Welcome to Professor Contacts!</h1>
-        <div class="login"> 
-            <h2>Login</h2>
-            <form method="post"> 
-                <p><input type="text" name="username" placeholder="Username"/></p>
-                
-                <p><input type="password" name="password" placeholder="Password"/></p>
-                
+        <h1>Login</h1>
+        <form>
+            <div class="login"> <!--- login box --->
+                <input type="text" id="username" placeholder="Username" /><br />
+                <input type="password" id="loginPassword" placeholder="Password"/><br />
+                <button type="button" id="loginButton" class="buttons" onclick="doLogin();"> Login </button>
+                <span id="loginResult"></span>
                 <div>
-                    <input type="submit" value="Login" />
                     <a href="register.html">Register</a>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </body>
 </html>
