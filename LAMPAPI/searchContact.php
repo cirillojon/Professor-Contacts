@@ -58,7 +58,8 @@
 			// Increment search count
 			$searchCount++;
 			// Add each query into a 2d array to be shown to the user
-			$searchResults .= '"' . $row["firstName"] . ' '. $row["lastName"] . ', '.'PhoneNumber: '. $row["phoneNumber"] .', '. 'Email: '. $row["email"]. '"';
+			//$searchResults .= '"' . $row["firstName"] . ' '. $row["lastName"] . ', '.'PhoneNumber: '. $row["phoneNumber"] .', '. 'Email: '. $row["email"]. '"';
+			$searchResults .= json_encode($row);
 		}
         
         // No records found
