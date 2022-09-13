@@ -16,7 +16,6 @@ function doLogin()
 	let userName = document.getElementById("username").value;
 	let password = document.getElementById("loginPassword").value;
 
-	document.getElementById("loginResult").innerHTML = "";
 
 	// Checks if the userName and password field was left empty
 	if ((userName == "") || (password == "")) {
@@ -55,11 +54,9 @@ function doLogin()
 				}
 
 				// Login successfully 
-				document.getElementById("loginResult").innerHTML = "Succesful";
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
 				
-				document.getElementById("loginResult").innerHTML = "firstName=" + firstName + ",lastName=" + lastName;
 				saveCookie();
 				
 				// Redirect to the main page, "color.html" is just a place holder for our actual main page
