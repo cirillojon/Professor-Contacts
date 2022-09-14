@@ -6,6 +6,13 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+// When the enter button was pressed, jump to the doRegister function
+document.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        doLogin;
+    }
+});
+
 function doLogin()
 {
 	userId = 0;
