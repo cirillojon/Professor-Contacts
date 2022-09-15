@@ -35,7 +35,7 @@
 			$stmt->bind_param("ssss", $firstName, $lastName, $userName, $password);
 			$stmt->execute();
 
-			returnWithInfo( $firstName, $lastName, $userName );
+			returnWithError("");
 		}
         
 		$stmt->close();
@@ -56,11 +56,5 @@
 	function returnWithError( $err )
 	{
 		$retValue = '{"error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue );
-	}
-
-	function returnWithInfo( $firstName, $lastName, $userName )
-	{
-		$retValue = '{"userName":' . $userName . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
