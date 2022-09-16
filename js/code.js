@@ -1,5 +1,5 @@
 // This urlBase must be changed to our domain, once our domain is working correctly
-const urlBase = 'http://159.223.160.41/LAMPAPI';
+const urlBase = 'http://www.professorcontacts.com/LAMPAPI';
 const extension = 'php';
 
 let userId = 0;
@@ -23,10 +23,13 @@ function doLogin()
 	let userName = document.getElementById("username").value;
 	let password = document.getElementById("loginPassword").value;
 
+	document.getElementById("loginResult").innerHTML="";
+
 
 	// Checks if the userName and password field was left empty
 	if ((userName == "") || (password == "")) {
         document.getElementById("loginResult").innerHTML = "All fields required";
+		document.getElementById("loginResult").style.color = '#E02745';
         return;
     }
 
@@ -57,6 +60,7 @@ function doLogin()
 				if( userId < 1 )
 				{		
 					document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
+					document.getElementById("loginResult").style.color = '#E02745';
 					return;
 				}
 
