@@ -1,67 +1,100 @@
-<html lang="en"><head>
-  <meta charset="UTF-8">
-  <title>Contacts Manager - Sign Up</title>
-  <script type="text/javascript" src="js/register.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet"><link rel="stylesheet" href="css/style.css">
-
-  </head>
-  <body class="align">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contacts Manager - Sign Up</title>
+    <script type="text/javascript" src="js/register.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="align">
     <!-- partial:index.partial.html -->
-
-
+      
     <div class="grid">
-      <img draggable="false" ondragstart="return false;" src="/images/ProfContactsLogo_white.png" class="image">
+          <img draggable="false" ondragstart="return false;" src="/images/ProfContactsLogo_white.png" class="image">
 
-      <form class="form login">
-        <div class="form__field">
-          <label for="login__firstname">
-            <svg class="icon">
-              <use xlink:href="#icon-name"></use>
-              <span class="hidden">First Name</span></label>
-            <input autocomplete="firstname" id="firstName" type="text" name="firstname" class="form__input" placeholder="First Name" required="">
-            </div>
-
-          <div class="form__field">
-            <label for="login__lastname">
-              <svg class="icon">
-                <use xlink:href="#icon-name"></use>
-                <span class="hidden">Last Name</span></label>
-              <input autocomplete="lastname" id="lastName" type="text" name="lastname" class="form__input" placeholder="Last Name" required="">
-              </div>
-            <div class="form__field">
-              <label for="login__username"><svg class="icon">
-                <use xlink:href="#icon-user"></use>
-                </svg><span class="hidden">Username</span></label>
-              <input autocomplete="username" id="userName" type="text" name="username" class="form__input" placeholder="Username" required>
-            </div>
-
-            <div class="form__field">
-              <label for="login__password"><svg class="icon">
-                <use xlink:href="#icon-lock"></use>
-                </svg><span class="hidden">Password</span></label>
-              <input id="loginPassword" type="password" name="password" class="form__input" placeholder="Password" required="">
-            </div>
-
-            <div class="form__field">
-              <label for="login__repeatpassword"><svg class="icon">
-                <use xlink:href="#icon-repeat"></use>
-                </svg><span class="hidden">Repeat Password</span></label>
-              <input id="repeatPassword" type="password" name="password" class="form__input" placeholder="Repeat Password" required="">
-            </div>
+        <form class="form login">
+            
             
             <div class="form__field">
-              <button type="button" class="buttons" id="loginButton" onclick="doRegister();">Sign up </button>
+                
+                <label for="login__firstname">
+                    <svg class="icon">
+                      <use xlink:href="#icon-name"></use>
+                    </svg>
+                    <span class="hidden">First Name</span>
+                </label>
+
+                <input autocomplete="firstname" id="firstName" type="text" name="firstname" class="form__input" placeholder="First Name" required="">
+
+            </div>
+
+            <div class="form__field">
+
+                <label for="login__lastname">
+                    <svg class="icon">
+                        <use xlink:href="#icon-name"></use>
+                    </svg>
+                    <span class="hidden">Last Name</span>
+                </label>
+
+                <input autocomplete="lastname" id="lastName" type="text" name="lastname" class="form__input" placeholder="Last Name" required="">
+
+            </div>
+
+            <div class="form__field">
+
+                <label for="login__username">
+                    <svg class="icon">
+                        <use xlink:href="#icon-user"></use>
+                    </svg>
+                    <span class="hidden">Username</span>
+                </label>
+
+                <input autocomplete="username" id="userName" type="text" name="username" class="form__input" placeholder="Username" required>
+
+             </div>
+
+            <div class="form__field">
+
+                <label for="login__password">
+                    <svg class="icon">
+                        <use xlink:href="#icon-lock"></use>
+                    </svg>
+                    <span class="hidden">Password</span>
+                </label>
+
+                <input id="loginPassword" type="password" name="password" class="form__input" placeholder="Password" required="">
+            </div>
+
+            <div class="form__field">
+                <label for="login__repeatpassword">
+                    <svg class="icon">
+                        <use xlink:href="#icon-repeat"></use>
+                    </svg>
+                    <span class="hidden">Repeat Password</span>
+                </label>
+
+                <input id="repeatPassword" type="password" name="password" class="form__input" placeholder="Repeat Password" required="">
+
             </div>
 
             <span id="registerResult"></span>
 
-            </form>
+            <div class="form__field">
+                <button type="button" class="buttons" id="loginButton" onclick="doRegister();">Sign up </button>
+            </div>
 
-          <p class="text--center">Already a member? <a href="index.html">Sign in.</a> <svg class="icon">
-            <use xlink:href="#icon-arrow-right"></use>
-            </svg></p>
+        </form>
 
-        </div>
+
+        <p class="text--center">Already a member? <a href="index.html">Sign in.</a> 
+            <svg class="icon">
+                <use xlink:href="#icon-arrow-right"></use>
+            </svg>
+        </p>
+
+    </div>
 
         <svg xmlns="http://www.w3.org/2000/svg" class="icons">
           <symbol id="icon-arrow-right" viewBox="0 0 1792 1792">
@@ -84,5 +117,5 @@
 
         <!-- partial -->
 
-
-        </body></html>
+</body>
+</html>
