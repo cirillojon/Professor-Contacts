@@ -1,55 +1,318 @@
-<html lang="en"><head>
-  <meta charset="UTF-8">
-  <title>Professor Contacts</title>
-  <script type="text/javascript" src="js/register.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet"><link rel="stylesheet" href="css/style.css">
+<!-- partial:index.partial.html -->
+<html lang="en" >
+  <head>
+    <meta charset="UTF-8">
+    <title>Professor Contacts</title>
+    <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap'><link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
   </head>
-  <body class="align">
-    <!-- partial:index.partial.html -->
+  <body>
+    <!-- SIDE BAR -->
+    <nav class="sidebar close">
+      <header>
+        <div class="image-text">
+          <span class="image">
+            <img src="https://i.imgur.com/bAaIzuH.png" alt="">
+          </span>
 
-
-    <div class="grid">
-      <img draggable="false" ondragstart="return false;" src="/images/ProfContactsLogo_white.png" class="image">
-
-      <form class="form login">
-         
-			<input type="text" id="searchText" placeholder="Color To Search For"/>
-			<button type="button" id="searchColorButton" class="buttons" onclick="searchColor();"> Search Color </button><br />
-			<span id="colorSearchResult"></span>
-			<p id="colorList">
-			</p><br /><br />
-
-			<input type="text" id="colorText" placeholder="Color To Add">
-			<button type="button" id="addColorButton" class="buttons" onclick="addColor();"> Add Color </button><br />
-			<span id="colorAddResult"></span>
-	
-			<span id="userName"></span><br />
-	        <button type="button" id="logoutButton" class="buttons" onclick="doLogout();"> Log Out </button>
-
-            </form>
+          <div class="text image-text">
+            <span class="image2">
+              <img src="https://i.imgur.com/E47xTMo.png" alt="">
+            </span>
+          </div>
         </div>
 
-        <svg xmlns="http://www.w3.org/2000/svg" class="icons">
-          <symbol id="icon-arrow-right" viewBox="0 0 1792 1792">
-            <path d="M1600 960q0 54-37 91l-651 651q-39 37-91 37-51 0-90-37l-75-75q-38-38-38-91t38-91l293-293H245q-52 0-84.5-37.5T128 1024V896q0-53 32.5-90.5T245 768h704L656 474q-38-36-38-90t38-90l75-75q38-38 90-38 53 0 91 38l651 651q37 35 37 90z"></path>
-          </symbol>
-          <symbol id="icon-lock" viewBox="0 0 1792 1792">
-            <path d="M640 768h512V576q0-106-75-181t-181-75-181 75-75 181v192zm832 96v576q0 40-28 68t-68 28H416q-40 0-68-28t-28-68V864q0-40 28-68t68-28h32V576q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68z"></path>
-          </symbol>
-          <symbol id="icon-user" viewBox="0 0 1792 1792">
-            <path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z"></path>
-          </symbol>
+        <i class='bx bx-chevron-right toggle'></i>
+      </header>
+      <div class="menu-bar">
+        <div class="menu">
 
-          <symbol id="icon-name"  viewBox="0 0 24 24">
-            <path d="M12 6a1 1 0 1 1-1 1a1 1 0 0 1 1-1zm-6 8h12v3H6zm14-8h-4V3H8v3H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zM10 5h4v5h-4zm10 14H4v-9h4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2h4z"></path>
-          </symbol>                
+          <ul class="menu-links">
+            <li class="nav-link">
+              <a href="#" onclick="addClicked();" >
+                <i class="fa-solid fa-user-plus icon"></i>
+                <span class="text nav-text">Create Contact</span>
+              </a>
+            </li>
 
-          <symbol id="icon-repeat" viewBox="0 0 256 256"><path d="M48 56v144a8 8 0 0 1-16 0V56a8 8 0 0 1 16 0Zm84 54.5l-20 6.5V96a8 8 0 0 0-16 0v21l-20-6.5a7.8 7.8 0 0 0-10 5.1a7.9 7.9 0 0 0 5.1 10.1l20 6.5l-12.4 17a8 8 0 0 0 1.8 11.2a8.1 8.1 0 0 0 11.2-1.8l12.3-17l12.3 17a8.1 8.1 0 0 0 11.2 1.8a8 8 0 0 0 1.8-11.2l-12.4-17l20-6.5a7.9 7.9 0 0 0 5.1-10.1a7.8 7.8 0 0 0-10-5.1Zm106 5.1a7.8 7.8 0 0 0-10-5.1l-20 6.5V96a8 8 0 0 0-16 0v21l-20-6.5a7.8 7.8 0 0 0-10 5.1a7.9 7.9 0 0 0 5.1 10.1l20 6.5l-12.4 17a8 8 0 0 0 1.8 11.2a8.1 8.1 0 0 0 11.2-1.8l12.3-17l12.3 17a8.1 8.1 0 0 0 11.2 1.8a8 8 0 0 0 1.8-11.2l-12.4-17l20-6.5a7.9 7.9 0 0 0 5.1-10.1Z"></path>
-          </symbol>    
-        </svg>
+            <li class="nav-link">
+              <a href="#">
+                <i class="fa-regular fa-star icon"></i>
+                <span class="text nav-text">Favorites</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <!-- partial -->
+        <div class="bottom-content">
+          <li class="">
+            <a href="index.html">
+              <i class='bx bx-log-out logout'></i>
+              <span class="text nav-text">Logout</span>
+            </a>
+          </li>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <section class="home">
+      <!--SEARCH BAR-->
+      <div class="wrapper">
+        <div class="searchBar">
+          <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search" value="" />
+          <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#abadaf" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+            </svg>
+          </button>
+        </div>
+        <span class = "helloMessage">Hello Insert Name</span>
+      </div>
+
+      <!--TABLE RESULTS-->
+      <div class = "tableResult">
+        <table class="table-sortable" id = "mytable">
+          <thead>
+            <tr>
+              <th width = "15%">Name</th>
+              <th width = "13%">Phone</th>
+              <th width = "17%">Email</th>
+              <th width = "17%">Address</th>
+              <th width = "13%">City</th>
+              <th width = "10%">State</th>
+              <th width = "8%">Zip</th>
+              <th width = "7%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>407-456-321</td>
+              <td>jdoe@gmail.com</td>
+              <td>123 Main St.</td>
+              <td>Orlando</td>
+              <td>FL</td>
+              <td>32123</td>
+              <td>
+                <label for="editContact">
+                  <svg class="iconTable" href = "#" onclick="editClicked();">
+                    <use xlink:href="#icon-edit"></use>
+                    </label>
+                <label for="deleteContact">
+                  <svg class="iconTable" href = "#" onclick="deleteClicked();">
+                    <use xlink:href="#icon-delete"></use>
+                    </label>
+              </td>
+            </tr>
+            <tr>
+              <td>John Doe</td>
+              <td>407-456-321</td>
+              <td>jdoe@gmail.com</td>
+              <td>123 Main St.</td>
+              <td>Orlando</td>
+              <td>FL</td>
+              <td>32123</td>
+              <td>
+                <label for="lastName">
+                  <svg class="iconTable" href = "#" onclick="editClicked();">
+                    <use xlink:href="#icon-edit"></use>
+                    </label>
+                <label for="deleteContact">
+                  <svg class="iconTable" href = "#" onclick="deleteClicked();">
+                    <use xlink:href="#icon-delete"></use>
+                    </label>
+                  </td>
+            </tr>
+          </tbody>          
+        </table>
+
+      </div>
+      
+      <!-- CREATE ACCOUNT Modal -->
+      <div id="id01" class="modal">
+        <form class="modal-content login" action="/action_page.php">
+          <div class="grid">
+
+            </br>
+          <div class="form__field">
+            <label for="firstName">
+              <svg class="iconModal">
+                <use xlink:href="#icon-name"></use>
+                <span class="hidden">First Name</span>
+                </label>
+              <input autocomplete="firstName" id="firstName" type="text" name="firstName" class="form__input" placeholder="First Name" required="">
+              </div>
+
+            <div class="form__field">
+              <label for="lastName">
+                <svg class="iconModal">
+                  <use xlink:href="#icon-name"></use>
+                  <span class="hidden">Last Name</span>
+                  </label>
+                <input autocomplete="lastName" id="lastName" type="text" name="lastName" class="form__input" placeholder="Last Name" required="">
+                </div>
+
+              <div class="form__field">
+                <label for="phoneNumber">
+                  <svg class="iconModal">
+                    <use xlink:href="#icon-phone"></use>
+                    <span class="hidden">Phone Number</span>
+                    </label>
+                  <input autocomplete="phoneNumber" id="phoneNumber" type="text" name="phoneNumber" class="form__input" placeholder="Phone Number" required="">
+                  </div>
+
+                <div class="form__field">
+                  <label for="emailAddress">
+                    <svg class="iconModal">
+                      <use xlink:href="#icon-email"></use>
+                      <span class="hidden">Email</span>
+                      </label>
+                    <input autocomplete="emailAddress" id="emailAddress" type="text" name="phoneNumber" class="form__input" placeholder="Email" required="">
+                    </div>
+
+                  <div class="form__field">
+                    <label for="streetAddress">
+                      <svg class="iconModal">
+                        <use xlink:href="#icon-home"></use>
+                        <span class="hidden">Street Address</span>
+                        </label>
+                      <input autocomplete="streetAddress" id="streetAddress" type="text" name="streetAddress" class="form__input" placeholder="Street Address" required="">
+                      </div>
+
+                    <div class="form__field">
+                      <label for="city">
+                        <svg class="iconModal">
+                          <use xlink:href="#icon-city"></use>
+                          <span class="hidden">City</span>
+                          </label>
+                        <input autocomplete="city" id="city" type="text" name="city" class="form__input" placeholder="City" required="">
+                        </div>
+                      
+                      <div class="form__field">
+                        <label for="state">
+                          <svg class="iconModal">
+                            <use xlink:href="#icon-state"></use>
+                            <span class="hidden">state</span>
+                            </label>
+                          <select class = "dropdown" id="state" type="text" name="state" class="form__input" required="">
+                            <option value="" disabled selected>Select State</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="DC">District Of Columbia</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                          </select>
+                          </div>
+
+                      <div class="form__field">
+                        <label for="zip">
+                          <svg class="iconModal">
+                            <use xlink:href="#icon-zip"></use>
+                            <span class="hidden">zip</span>
+                            </label>
+                          <input autocomplete="zip" id="zip" type="text" name="zip" class="form__input" placeholder="Zip" required="">
+                          </div>  
 
 
-        </body></html>
+                        <div class="form__field">
+                          <button type="button" class="buttons" id="addContact" onclick="">Add Contact </button>
+                        </div>
+
+                        </br>
+                    </div>
+                    </form>
+</div>
+
+    </section>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" class="icons">
+      <symbol id="icon-edit" viewBox='0 0 512 512'>
+        <path d='M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.8 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z'></path>
+      </symbol>
+
+      <symbol id="icon-home" viewBox='0 0 576 512'>
+        <path d='M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z'></path>
+      </symbol>
+
+      <symbol id="icon-phone" viewBox='0 0 512 512'>
+        <path d='M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z'></path>
+      </symbol>
+
+      <symbol id="icon-email" viewBox='0 0 512 512'>
+        <path d='M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z'></path>
+      </symbol>
+
+      <symbol id="icon-state" viewBox='0 0 512 512'>
+        <path d='M63 23.9C59.4 10.1 46.9 0 32 0C14.3 0 0 14.3 0 32V480c0 17.7 14.3 32 32 32s32-14.3 32-32V380.1c2-.8 4.8-1.8 8.2-3c8-2.8 19.4-6.6 32.6-10.4C131.9 359 164.5 352 192 352c26.3 0 46 6.4 70 14.4l1 .3c23.8 7.9 51.9 17.3 89 17.3c36.8 0 72.5-9.1 98.1-17.6c13-4.3 23.8-8.7 31.5-11.9c3.8-1.6 6.9-3 9-4c1.1-.5 1.9-.9 2.5-1.2l.7-.4 .2-.1 .1 0 0 0 0 0s0 0-14.3-28.6l14.3 28.6c10.8-5.4 17.7-16.5 17.7-28.6V289.1c-2.2 .8-5 1.8-8.2 3c-8.8 3.1-21.1 7.2-35.5 11.3C439.8 311.5 402.1 320 368 320c-34.1 0-63.9-8.5-91.4-16.4l-.8-.2C247.5 295.3 221.4 288 192 288c-29.7 0-61.9 7.5-87.3 15.3C92.1 307.2 81.5 311 74 313.9c-3.7 1.4-6.7 2.6-8.6 3.5L64 318V283.5c7.9-3 18.7-6.9 31.3-10.8c26.6-8.2 62.4-16.7 96.7-16.7c34.3 0 64.2 8.5 91.8 16.4l.7 .2c28.3 8.1 54.2 15.4 83.5 15.4c29.6 0 63.9-7.5 91.5-15.4c13.6-3.9 25.4-7.8 33.6-10.7c4.1-1.5 7.4-2.7 9.6-3.5c1.1-.4 2-.7 2.5-1l.6-.2 .1-.1 0 0 0 0 0 0 0 0 5.9-2.4V193.1c-2.2 .8-5 1.8-8.2 3c-8.8 3.1-21.1 7.2-35.5 11.3C439.8 215.5 402.1 224 368 224c-34.1 0-63.9-8.5-91.4-16.4l-.8-.2C247.5 199.3 221.4 192 192 192c-29.7 0-61.9 7.5-87.3 15.3C92.1 211.2 81.5 215 74 217.9c-3.7 1.4-6.7 2.6-8.6 3.5L64 222V187.5c7.9-3 18.7-6.9 31.3-10.8c26.6-8.2 62.4-16.7 96.7-16.7c34.3 0 64.2 8.5 91.8 16.4l0 0 .7 .2c28.3 8.1 54.2 15.4 83.5 15.4c29.6 0 63.9-7.5 91.5-15.4c13.6-3.9 25.4-7.8 33.6-10.7c4.1-1.5 7.4-2.7 9.6-3.5c1.1-.4 2-.7 2.5-1l.6-.2 .1-.1 0 0 0 0 0 0 0 0 5.9-2.4V97.1c-2.2 .8-5 1.8-8.2 3c-8.8 3.1-21.1 7.2-35.5 11.3C439.8 119.5 402.1 128 368 128c-34.1 0-63.9-8.5-91.4-16.4l-.8-.2c-6.7-1.9-13.2-3.8-19.7-5.5V72.8c9.6 2.4 18.8 5 27.8 7.6l.7 .2C312.8 88.7 338.7 96 368 96c29.6 0 63.9-7.5 91.5-15.4c13.6-3.9 25.4-7.8 33.6-10.7c4.1-1.5 7.4-2.7 9.6-3.5c1.1-.4 2-.7 2.5-1l.6-.2 .1-.1 0 0 0 0 0 0 0 0 5.9-2.4V32c0-11.4-6.1-21.9-15.9-27.7s-22-5.8-31.9-.2l-.2 .1c-.3 .2-.7 .4-1.4 .8c-1.3 .7-3.4 1.8-6.2 3.1c-5.5 2.6-13.6 6.2-23.4 9.8c-20 7.3-46.2 14.1-73 14.1c-26.7 0-50.6-6.6-79.1-14.8l-1.3-.4C252.3 9.1 220.5 0 184 0C147.3 0 109.8 9 82.6 17.4c-7.2 2.2-13.8 4.4-19.6 6.5zM208 48c0 8.8-7.2 16-16 16s-16-7.2-16-16s7.2-16 16-16s16 7.2 16 16zm-64 8c0 8.8-7.2 16-16 16s-16-7.2-16-16s7.2-16 16-16s16 7.2 16 16zm48 72c-8.8 0-16-7.2-16-16s7.2-16 16-16s16 7.2 16 16s-7.2 16-16 16zm-48-8c0 8.8-7.2 16-16 16s-16-7.2-16-16s7.2-16 16-16s16 7.2 16 16z'></path>
+      </symbol>
+
+      <symbol id="icon-zip" viewBox='0 0 512 512'>
+        <path d='M64 208.1L256 65.9 448 208.1v47.4L289.5 373c-9.7 7.2-21.4 11-33.5 11s-23.8-3.9-33.5-11L64 255.5V208.1zM256 0c-12.1 0-23.8 3.9-33.5 11L25.9 156.7C9.6 168.8 0 187.8 0 208.1V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V208.1c0-20.3-9.6-39.4-25.9-51.4L289.5 11C279.8 3.9 268.1 0 256 0z'></path>
+      </symbol>
+
+      <symbol id="icon-name"  viewBox='0 0 448 512'>
+        <path d='M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z'></path>
+      </symbol>                
+
+      <symbol id="icon-city" viewBox='0 0 640 512'><path d='M480 48c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48V96H224V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V96H112V24c0-13.3-10.7-24-24-24S64 10.7 64 24V96H48C21.5 96 0 117.5 0 144v96V464c0 26.5 21.5 48 48 48H304h32 96H592c26.5 0 48-21.5 48-48V240c0-26.5-21.5-48-48-48H480V48zm96 320v32c0 8.8-7.2 16-16 16H528c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16zM240 416H208c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16zM128 400c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32zM560 256c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H528c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32zM256 176v32c0 8.8-7.2 16-16 16H208c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16zM112 160c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h32zM256 304c0 8.8-7.2 16-16 16H208c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32zM112 320H80c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16zm304-48v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16zM400 64c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h32zm16 112v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16z'></path>
+      </symbol>
+      
+      <symbol id="icon-delete" viewBox='0 0 448 512'><path d='M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z'></path>
+      </symbol> 
+    </svg>
+
+    <script  src="js/landing.js"></script>
+  </body>
+</html>
+
+
