@@ -9,7 +9,7 @@
     // Establish a connection from the database
 	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
 
-    // Check for errors, if there are error, alert the user 
+    // Check for errors, if there are error, alert the user
 	if ($conn->connect_error)
 	{
 		returnWithError($conn->connect_error );
@@ -25,7 +25,7 @@
 		// Check if the username already exist then alert the user
 		if (mysqli_num_rows($result) > 0)
 		{
-			returnWithError("Username Already Exists!");
+			returnWithError("Username already exists!");
 		}
 		else
 		{
@@ -37,7 +37,7 @@
 
 			returnWithError("");
 		}
-        
+
 		$stmt->close();
 		$conn->close();
 	}

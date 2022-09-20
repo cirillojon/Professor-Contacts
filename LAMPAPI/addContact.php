@@ -10,6 +10,7 @@
 	$city = $inData["city"];
 	$state = $inData["state"];
 	$zip = $inData["zip"];
+	$userId = $inData["userId"];
     
     // Establish a database connection
 	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
@@ -20,11 +21,11 @@
 	else
 	{
 		// Create an insert query that includes the input from the user
-		$sqlInsert = "INSERT INTO contacts (firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES (?,?,?,?,?,?,?,?)";
+		$sqlInsert = "INSERT INTO contacts (userId, firstName, lastName, email, phoneNumber, streetAddress, city, state, zip) VALUES (?, ?,?,?,?,?,?,?,?)";
 
         // Insert a new contact to the database
 		$stmt = $conn->prepare($sqlInsert);
-		$stmt->bind_param("ssssssss", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip);
+		$stmt->bind_param("issssssss", $userId, $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip);
 		$stmt->execute();
 
 		returnWithError("No error, successful");

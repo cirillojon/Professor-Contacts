@@ -9,7 +9,7 @@
     $city = $inData["city"];
     $state = $inData["state"];
     $zip = $inData["zip"];
-    $contactId = $inData["contactId"];
+    $userId = $inData["userId"];
 
     // Establish a connection to the database
 	$conn = new mysqli("localhost", "User1", "COP4331", "Group26");
@@ -20,10 +20,10 @@
 	else
 	{
 		// Fetch the contact from the database then update it using the inputs from the user. 
-        // The contactId must match to the one that the user was trying to update
-        $query = "UPDATE contacts SET firstName=?, lastName=?, email=?, phoneNumber=?, streetAddress=?, city=?, state=?, zip=? WHERE contactId=?";
+        // The userId must match to the one that the user was trying to update
+        $query = "UPDATE contacts SET firstName=?, lastName=?, email=?, phoneNumber=?, streetAddress=?, city=?, state=?, zip=? WHERE userId=?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssssssi", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip, $contactId);
+        $stmt->bind_param("ssssssssi", $firstName, $lastName, $emailAddress, $phoneNumber, $streetAddress, $city, $state, $zip, $userId);
         // Execute the command
         $stmt->execute();
 

@@ -26,22 +26,22 @@
 			$search2 = "%" . $split[0] . "%";
 			$search3 = "%" . $split[1] . "%";
 
-			// Find contact using their first name or last name (must match their contactId)
+			// Find contact using their first name or last name (must match their userId - userId = ID from user)
 			$query = "SELECT firstName, lastName, email, phoneNumber, streetAddress, city, state, zip 
-			FROM contacts WHERE (firstName LIKE ? OR firstName LIKE ? OR lastName LIKE ? OR lastName LIKE ?) AND contactId = ?";
+			FROM contacts WHERE (firstName LIKE ? OR firstName LIKE ? OR lastName LIKE ? OR lastName LIKE ?) AND userId = ?";
 			// Prepare the query
 			$stmt = $conn->prepare($query);
-			$stmt->bind_param("ssssi", $search1, $search2, $search1, $search3, $inData["contactId"]);
+			$stmt->bind_param("ssssi", $search1, $search2, $search1, $search3, $inData["userId"]);
 		}
 		// Only one word was in the search bar
 		else 
 		{
-			// Find contact using their first name or last name (must match their contactId)
+			// Find contact using their first name or last name (must match their userId)
 			$query = "SELECT firstName, lastName, email, phoneNumber, streetAddress, city, state, zip 
-			FROM contacts WHERE (firstName LIKE ? OR lastName LIKE ?) AND contactId = ?";
+			FROM contacts WHERE (firstName LIKE ? OR lastName LIKE ?) AND userId = ?";
 			// Prepare the query
 			$stmt = $conn->prepare($query);
-			$stmt->bind_param("ssi", $search1, $search1, $inData["contactId"]);
+			$stmt->bind_param("ssi", $search1, $search1, $inData["userId"]);
 		}
 
 		// Run the query

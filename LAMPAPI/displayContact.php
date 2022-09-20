@@ -16,10 +16,11 @@
 	}
 	else
 	{
-		// Find contact using their first name or last name (must match their contactId)
-		$query = "SELECT * FROM contacts";
+		// Find contact using their first name or last name (must match their userId)
+		$query = "SELECT * FROM contacts where userId = ?";
 		// Prepare the query
 		$stmt = $conn->prepare($query);
+		$stmt->bind_param("i",$inData["userId"]);
 		// Run the query
         $stmt->execute();
 

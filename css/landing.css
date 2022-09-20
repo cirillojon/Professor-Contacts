@@ -319,7 +319,7 @@ body {
 
 .table-sortable th,
 .table-sortable td {
-  padding: 12px 15px;
+  padding: 15px 15px;
 }
 
 .table-sortable tbody tr:nth-of-type(even) {
@@ -362,11 +362,10 @@ body {
   cursor: pointer;
 }
 
-.deleteIcon {
+.iconTable:hover {
   height: 1em;
-  display: inline;
-  fill: #606468;
-  fill: var(--iconFill);
+  display: inline-block;
+  fill: #e54128;
   width: 1em;
   vertical-align: middle;
   cursor: pointer;

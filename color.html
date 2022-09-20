@@ -4,9 +4,18 @@
     <meta charset="UTF-8">
     <title>Professor Contacts</title>
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'>
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap'><link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="css/landing.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function() 
+      {
+        readCookie();
+        showTable();
+      }, false);
+    </script>
+
 
   </head>
   <body>
@@ -69,65 +78,19 @@
             </svg>
           </button>
         </div>
-        <span class = "helloMessage">Hello Insert Name</span>
+        <span class = "helloMessage" id = "helloMessage">Hello Insert Name</span>
       </div>
 
       <!--TABLE RESULTS-->
       <div class = "tableResult">
-        <table class="table-sortable" id = "mytable">
+        <table class="table-sortable" id="contactTable">
           <thead>
             <tr>
-              <th width = "15%">Name</th>
-              <th width = "13%">Phone</th>
-              <th width = "17%">Email</th>
-              <th width = "17%">Address</th>
-              <th width = "13%">City</th>
-              <th width = "10%">State</th>
-              <th width = "8%">Zip</th>
-              <th width = "7%"></th>
             </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>John Doe</td>
-              <td>407-456-321</td>
-              <td>jdoe@gmail.com</td>
-              <td>123 Main St.</td>
-              <td>Orlando</td>
-              <td>FL</td>
-              <td>32123</td>
-              <td>
-                <label for="editContact">
-                  <svg class="iconTable" href = "#" onclick="editClicked();">
-                    <use xlink:href="#icon-edit"></use>
-                    </label>
-                <label for="deleteContact">
-                  <svg class="iconTable" href = "#" onclick="deleteClicked();">
-                    <use xlink:href="#icon-delete"></use>
-                    </label>
-              </td>
-            </tr>
-            <tr>
-              <td>John Doe</td>
-              <td>407-456-321</td>
-              <td>jdoe@gmail.com</td>
-              <td>123 Main St.</td>
-              <td>Orlando</td>
-              <td>FL</td>
-              <td>32123</td>
-              <td>
-                <label for="lastName">
-                  <svg class="iconTable" href = "#" onclick="editClicked();">
-                    <use xlink:href="#icon-edit"></use>
-                    </label>
-                <label for="deleteContact">
-                  <svg class="iconTable" href = "#" onclick="deleteClicked();">
-                    <use xlink:href="#icon-delete"></use>
-                    </label>
-                  </td>
-            </tr>
-          </tbody>          
         </table>
+
+
+        <span id ="colorSearchResult"></span>
 
       </div>
       
@@ -311,7 +274,7 @@
       </symbol> 
     </svg>
 
-    <script  src="js/landing.js"></script>
+    <script  src="js/code.js"></script>
   </body>
 </html>
 
