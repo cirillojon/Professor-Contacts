@@ -43,10 +43,10 @@ function doRegister()
   		return;
   	}
 
-	//hash = md5(password);
-  	//let tmp = {userName:userName, password: hash, firstName:firstName, lastName:lastName};
+	hash = md5(password);
+  	let tmp = {userName:userName, password: hash, firstName:firstName, lastName:lastName};
 
-	let tmp = {userName:userName, password: password, firstName:firstName, lastName:lastName};
+	//let tmp = {userName:userName, password: password, firstName:firstName, lastName:lastName};
   	let jsonPayload = JSON.stringify(tmp);
 
   	// Path for the php file, the path name should be changed with every api endpoints

@@ -22,7 +22,7 @@ function doLogin()
 	// These variables must match the "id" part in the html
 	let userName = document.getElementById("username").value;
 	let password = document.getElementById("loginPassword").value;
-	//var hash = md5(password);
+	var hash = md5(password);
 
 	document.getElementById("loginResult").innerHTML="";
 
@@ -38,8 +38,8 @@ function doLogin()
 	// These names are case sensitive make sure to match the reference to the php file
 
 	// Hashing
-	//var tmp = {userName:userName,password:hash};
-	let tmp = {userName:userName, password:password};
+	var tmp = {userName:userName,password:hash};
+	//let tmp = {userName:userName, password:password};
 	let jsonPayload = JSON.stringify(tmp);
 
 	// Path for the php file, the path name should be changed with every api endpoints
@@ -325,26 +325,6 @@ function addContact()
 	formated_phone = "("+phone.substring(0,3)+")"+phone.substring(3,6)+"-"+phone.substring(6,11)
 	console.log(formated_phone);
 
-	/*
-	// Input is not required
-	if (email == "" || address == "" || city == "" || state == "" || zip == ""){
-		if (email == ""){
-			email = " ";
-		}
-		if (address == ""){
-			address = " ";
-		}
-		if (city == ""){
-			city = " ";
-		}
-		if (state == "") {
-			state = " ";
-		}
-		if (zip == ""){
-			zip = " ";
-		}
-	}
-	*/
 
 	//* --------- CONNECT TO THE DATABASE THRU API -----------*/
   	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:formated_phone, streetAddress:address, city:city, state:state, zip:zip};
