@@ -83,7 +83,7 @@ function doRegister()
   				document.getElementById("repeatPassword").value = "";
 
 				// Wait for 2 seconds to show the "Successfully registered" message then redirect to the login page
-				window.setTimeout(function (){window.location.href = "index.html";}, 2000);
+				window.setTimeout(function (){window.location.href = "index.html";}, 1000);
 
   			}
 
