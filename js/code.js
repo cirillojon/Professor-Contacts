@@ -6,7 +6,7 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
-// When the enter button was pressed, jump to the doRegister function
+// When the enter button was pressed, jump to the doLogin function
 document.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {
         doLogin;
@@ -140,24 +140,143 @@ function readCookie()
 }
 
 
+
+
+
+/*============================================*/
+/*=============== LANDING PAGE ===============*/
+/*============================================*/
+
+/* ---- TOGGLE SIDEBAR ---- */
+const body = document.querySelector("body"),
+  sidebar = body.querySelector("nav"),
+  toggle = body.querySelector(".toggle");
+
+toggle.addEventListener("click", () => {
+  sidebar.classList.toggle("close");
+});
+
+
+/* ---- MODAL (POP-UP CONTACT FORM) ---- */
+function addClicked(){
+  edit = 0;
+  document.getElementById('id01').style.display='block';
+}
+
+let edit = 0;		// edit == 1 (Edit button was clicked), edit == 0 (Add contact button was clicked)
+let contactID = 0;	// Stores the contact ID 
+function editClicked(ID){
+	contactID = ID;
+	console.log("contactID : ",contactID);
+
+	edit = 1;
+  	document.getElementById('id01').style.display='block';
+}
+
+var modal = document.getElementById('id01');
+// Show the contact form
+window.onclick = function(event) {
+	if (event.target == modal) {
+		modal.style.display = "none";
+	}
+
+  	if (edit == 1){
+		editContact();
+	}
+	else if (edit == 0){
+		clearContactFormField();
+		edit = 2;
+  	}
+}
+
+function editContact(){
+	let tmp = {ID: contactID, userId: userId};
+  	let jsonPayload = JSON.stringify( tmp );
+	
+  	let url = urlBase + '/getContact.' + extension;
+
+  	let xhr = new XMLHttpRequest();
+  	xhr.open("POST", url, true);
+  	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+  	try
+  	{
+  		xhr.onreadystatechange = function()
+  		{
+  			if (this.readyState == 4 && this.status == 200)
+  			{
+				document.getElementById("addContactResult").innerHTML = "";
+				let jsonObject = JSON.parse( xhr.responseText );
+				// GET THE RESULT FROM THE DATABASE
+				contactList = jsonObject.results;
+
+				console.log(contactList[0].firstName);
+
+				// GET THE DETAILS FROM THE JSON OBJECT
+				let oldFirstName = contactList[0].firstName;
+				let oldLastName = contactList[0].lastName;
+				let oldPhoneNumber = contactList[0].phoneNumber;
+				let oldEmail = contactList[0].email;
+				let oldStreetAddress = contactList[0].streetAddress;
+				let oldCity = contactList[0].city;
+				let oldState = contactList[0].state;
+				let oldZip = contactList[0].zip;
+				let contactId = contactList[0].ID;
+
+				// POPULATE THE INPUT FIELDS
+				document.getElementById("firstName").value = oldFirstName;
+				document.getElementById("lastName").value = oldLastName;
+				document.getElementById("phoneNumber").value = oldPhoneNumber;
+				document.getElementById("emailAddress").value = oldEmail;
+				document.getElementById("streetAddress").value = oldStreetAddress;
+				document.getElementById("city").value = oldCity;
+				document.getElementById("state").value = oldState;
+				document.getElementById("zip").value = oldZip;
+
+				addContactButton.innerText = 'Update Contact';
+			}
+		};
+		xhr.send(jsonPayload);
+  	}
+  	catch(err)
+  	{
+  		document.getElementById("addContactResult").innerHTML = err.message;
+  	}
+}
+
+function clearContactFormField(){
+	// Clear input fields
+	document.getElementById("firstName").value = "";
+	document.getElementById("lastName").value = "";
+	document.getElementById("phoneNumber").value = "";
+	document.getElementById("emailAddress").value = "";
+	document.getElementById("streetAddress").value = "";
+	document.getElementById("city").value = "";
+	document.getElementById("state").value = "";
+	document.getElementById("zip").value = "";
+
+	addContactButton.innerText = 'Add Contact';
+}
+
+
 /* =============== ADD CONTACT ================= */
 function addContact()
 {
+	// Get the inputs
 	let first = document.getElementById("firstName").value;
 	let last = document.getElementById("lastName").value;
-
 	let email = document.getElementById("emailAddress").value;
 	let phone = document.getElementById("phoneNumber").value;
-
 	let address = document.getElementById("streetAddress").value;
 	let city = document.getElementById("city").value;
 	let state = document.getElementById("state").value;
 	let zip = document.getElementById("zip").value;
 
+	document.getElementById("addContactResult").innerHTML = "";
+
 	//* --------- CHECK USER INPUT -----------*/
-	//if (email != ""// Only check if first, last name, and phone fields is not empty
+	// Only check if first, last name, and phone fields is not empty
 	if(first == "" || last == "" || phone == ""){
-		document.getElementById("addContactResult").innerHTML = "One of the required fields is incomplete";
+		document.getElementById("addContactResult").innerHTML = "One of the required* fields is incomplete";
 		document.getElementById("addContactResult").style.color = '#E02745';
 		return;
 	}
@@ -165,7 +284,7 @@ function addContact()
 	// If they put an email, check if it is a valid ID
 	if (email != "" && !validEmail(email)){
 		document.getElementById("addContactResult").innerHTML = "Email not supported";
-		document.getElementById("loginResult").style.color = '#E02745';
+		document.getElementById("addContactResult").style.color = '#E02745';
 		return;
 	}
 
@@ -178,10 +297,12 @@ function addContact()
 
 	// Validate the phone number	
 	if (!validPhone(phone)){
-		document.getElementById("addContactResult").innerHTML = "Please enter a valid phone number";
+		document.getElementById("addContactResult").innerHTML = "Please enter a valid phone number (digits only, no space)";
 		document.getElementById("addContactResult").style.color = '#E02745';
 		return;
 	}
+	formated_phone = "("+phone.substring(0,3)+")"+phone.substring(3,6)+"-"+phone.substring(6,11)
+	console.log(formated_phone);
 
 	// Input is not required
 	if (email == "" || address == "" || city == "" || state == "" || zip == ""){
@@ -202,9 +323,9 @@ function addContact()
 		}
 	}
 
-  	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:phone, streetAddress:address, city:city, state:state, zip:zip};
+	//* --------- CONNECT TO THE DATABASE THRU API -----------*/
+  	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:formated_phone, streetAddress:address, city:city, state:state, zip:zip};
   	let jsonPayload = JSON.stringify( tmp );
-
 	
   	let url = urlBase + '/addContact.' + extension;
 
@@ -219,8 +340,8 @@ function addContact()
   			{
 				document.getElementById("addContactResult").innerHTML = "Contact successfully added!";
 				document.getElementById("addContactResult").style.color = 'green';
-				// Show it to the table
-				addToTable(first, last, phone, email, address, city, state, zip);
+				
+				showTable();	// Show added contact to the table
 			}
 		};
 		xhr.send(jsonPayload);
@@ -237,51 +358,16 @@ function validEmail(e) {
 }
 
 function validPhone(p) {
-	var phoneRe = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-	var digits = p.replace(/\D/g, "");
-	return phoneRe.test(digits);
+	var phoneRe = /^\d{10}$/;
+	return phoneRe.test(p);
   }
 
   function validZip(zip) {
 	return /^\d{5}(-\d{4})?$/.test(zip);
  }
-
- function addToTable(firstName, lastName, phoneNumber, email, streetAddress, city, state, zip){
-	var html = document.getElementById("contactTable").innerHTML
-
-	var fullName = firstName + " " + lastName;
-	var phoneNumber = phoneNumber;
-	var email = email;
-
-	if ( streetAddress == " " || city == " " || state == " " || zip == " "){
-		var address = streetAddress + " " + city + " " + state + " " + zip;
-	}
-	else {
-		var address = streetAddress + ", " + city + ", " + state + " " + zip;				
-	}
-
-	var edit = "<td>"+
-					"<label for='editContact'>"+
-						"<svg class='iconTable' onclick='editClicked();'>"+
-						"<use xlink:href='#icon-edit'></use>"+
-					"</label>"+
-					"<label> </label>"+
-					"<label for='deleteContact'>"+
-						"<svg class='iconTable' href = '#' onclick='deleteClicked();'>"+
-						"<use xlink:href='#icon-delete'></use>"+
-					"</label>"+
-				"</td>";
-
-	var row = "";
-	row += '<tr><td>' + fullName + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + address + edit;
-
-	html += row;
-
-	document.getElementById("contactTable").innerHTML = html;
-}
 /* =============== END OF ADD CONTACT ================= */
 
-
+/* =============== DELETE CONTACT ================= */
 function deleteContact(contactID)
 {
 	console.log(contactID);
@@ -315,71 +401,6 @@ function deleteContact(contactID)
 	}
 }
 
-/*=============== LANDING PAGE ===============*/
-let edit = 0;
-function editClicked(){
-  edit = 1;
-  document.getElementById('id01').style.display='block';
-}
-
-function addClicked(){
-  edit = 0;
-  document.getElementById('id01').style.display='block';
-}
-
-/* ---- TOGGLE SIDEBAR ---- */
-const body = document.querySelector("body"),
-  sidebar = body.querySelector("nav"),
-  toggle = body.querySelector(".toggle");
-
-toggle.addEventListener("click", () => {
-  sidebar.classList.toggle("close");
-});
-
-/*=============== MODAL (POP-UP CONTACT FORM) ===============*/
-var modal = document.getElementById('id01');
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-
-  if (edit == 1){
-    var table = document.getElementById('mytable');
-
-    let firstName = table.rows[1].cells[0].innerHTML;
-    let phone = table.rows[1].cells[1].innerHTML;
-    let email = table.rows[1].cells[2].innerHTML;
-    let address = table.rows[1].cells[3].innerHTML;
-    let city = table.rows[1].cells[4].innerHTML;
-    let state = table.rows[1].cells[5].innerHTML;
-    let zip = table.rows[1].cells[6].innerHTML;
-
-    document.getElementById("firstName").value = firstName;
-    document.getElementById("lastName").value = firstName;
-    document.getElementById("phoneNumber").value = phone;
-    document.getElementById("emailAddress").value = email;
-    document.getElementById("streetAddress").value = address;
-    document.getElementById("city").value = city;
-    document.getElementById("state").value = state;
-    document.getElementById("zip").value = zip;
-
-    addContact.innerText = 'Update Contact';
-  }
-  else if (edit == 0){
-    document.getElementById("firstName").value = "";
-    document.getElementById("lastName").value = "";
-    document.getElementById("phoneNumber").value = "";
-    document.getElementById("emailAddress").value = "";
-    document.getElementById("streetAddress").value = "";
-    document.getElementById("city").value = "";
-    document.getElementById("state").value = "";
-    document.getElementById("zip").value = "";
-
-    addContact.innerText = 'Add Contact';
-    edit=2;
-  }
-}
-
 
 /*=============== DISPLAY CONTACTS TO THE TABLE ===============*/
 function showTable(){
@@ -398,6 +419,9 @@ function showTable(){
 			if (this.readyState == 4 && this.status == 200)
 			{
 				let jsonObject = JSON.parse( xhr.responseText );
+
+				var Table = document.getElementById("contactTable");
+				Table.innerHTML = "<thead><tr></tr>";
 
 				// Insert the header for the table
 				setHeader();
@@ -428,12 +452,12 @@ function showTable(){
 					
 					var edit = "<td>"+
 									"<label for='editContact'>"+
-										"<svg class='iconTable' onclick='editClicked();'>"+
+										"<svg class='iconTable' onclick='editClicked(" + contactList[i].ID + ");'>"+
 										"<use xlink:href='#icon-edit'></use>"+
 									"</label>"+
 									"<label> </label>"+
 									"<label for='deleteContact'>"+
-										"<svg class='iconTable' href = '#' onclick='deleteClicked();'>"+
+										"<svg class='iconTable' href = '#' onclick='editClicked(this);'>"+
 										"<use xlink:href='#icon-delete'></use>"+
 									"</label>"+
 								"</td>";
@@ -459,41 +483,6 @@ function showTable(){
 
 }
 
-function addToTable(firstName, lastName, phoneNumber, email, streetAddress, city, state, zip){
-	var html = document.getElementById("contactTable").innerHTML
-
-	
-
-	var fullName = firstName + " " + lastName;
-	var phoneNumber = phoneNumber;
-	var email = email;
-
-	if ( streetAddress == " " || city == " " || state == " " || zip == " "){
-		var address = streetAddress + " " + city + " " + state + " " + zip;
-	}
-	else {
-		var address = streetAddress + ", " + city + ", " + state + " " + zip;				
-	}
-
-	var edit = "<td>"+
-					"<label for='editContact'>"+
-						"<svg class='iconTable' onclick='editClicked();'>"+
-						"<use xlink:href='#icon-edit'></use>"+
-					"</label>"+
-					"<label> </label>"+
-					"<label for='deleteContact'>"+
-						"<svg class='iconTable' href = '#' onclick='deleteClicked();'>"+
-						"<use xlink:href='#icon-delete'></use>"+
-					"</label>"+
-				"</td>";
-
-	var row = "";
-	row += '<tr><td>' + fullName + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + address + edit;
-
-	html += row;
-
-	document.getElementById("contactTable").innerHTML = html;
-}
 
 // INSERT HEADERS TO THE TABLE
 function setHeader() {

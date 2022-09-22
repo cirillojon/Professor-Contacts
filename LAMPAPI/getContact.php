@@ -18,23 +18,30 @@
 		$stmt = $conn->prepare($query);
 		$stmt->bind_param("ii", $ID, $userId);
 		$stmt->execute();
+		// Gets the result form the query
 		$result = $stmt->get_result();
-		
-		// If the user exists, then it is ok to delete
-		if (mysqli_num_rows($result) > 0)
+		while($row = $result->fetch_assoc())
 		{
-			// Create a delete query to delete a contact by looking for the userId
-			$deleteQuery = 'DELETE FROM contacts WHERE ID = ? AND userId = ?';
-			// Delete the contact from the database
-			$stmt = $conn->prepare($deleteQuery);
-			$stmt->bind_param("ii", $ID, $userId);
-			$stmt->execute();
-
-			returnWithError("No error, Succesful");
+			if ($searchCount > 0) 
+			{
+				$searchResults .= ",";
+			}
+			// Increment search count
+			$searchCount++;
+			// Add each query into a 2d array to be shown to the user
+			//$searchResults .= '"' . $row["firstName"] . ' '. $row["lastName"] . ', '.'PhoneNumber: '. $row["phoneNumber"] .', '. 'Email: '. $row["email"]. '"';
+			$searchResults .= json_encode($row);
 		}
+        
+        // No records found
+		if( $searchCount == 0 )
+		{
+			returnWithError("No Records Found" );
+		}
+        // Show the results
 		else
 		{
-			returnWithError("User does not exist");
+			returnWithInfo($searchResults);
 		}
 
 		// Close the connection
@@ -56,6 +63,12 @@
 	function returnWithError($err)
 	{
 		$retValue = '{"error":"' . $err . '"}';
+		sendResultInfoAsJson( $retValue );
+	}
+
+	function returnWithInfo( $searchResults )
+	{
+		$retValue = '{"results":[' . $searchResults . '],"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 ?>
