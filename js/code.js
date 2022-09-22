@@ -222,6 +222,25 @@ function editContact(){
 				let oldZip = contactList[0].zip;
 				let contactId = contactList[0].ID;
 
+				// Input is not required
+				if (oldEmail == " " || oldStreetAddress == " " || oldCity == " " || oldState == " " || oldZip == " "){
+					if (oldEmail == " "){
+						oldEmail = "";
+					}
+					if (oldStreetAddress == " "){
+						oldStreetAddress = "";
+					}
+					if (oldCity == " "){
+						oldCity = "";
+					}
+					if (oldState == " ") {
+						oldState = "";
+					}
+					if (oldZip == " "){
+						oldZip = "";
+					}
+				}
+
 				// POPULATE THE INPUT FIELDS
 				document.getElementById("firstName").value = oldFirstName;
 				document.getElementById("lastName").value = oldLastName;
@@ -231,6 +250,8 @@ function editContact(){
 				document.getElementById("city").value = oldCity;
 				document.getElementById("state").value = oldState;
 				document.getElementById("zip").value = oldZip;
+
+				
 
 				addContactButton.innerText = 'Update Contact';
 			}
@@ -304,6 +325,7 @@ function addContact()
 	formated_phone = "("+phone.substring(0,3)+")"+phone.substring(3,6)+"-"+phone.substring(6,11)
 	console.log(formated_phone);
 
+	/*
 	// Input is not required
 	if (email == "" || address == "" || city == "" || state == "" || zip == ""){
 		if (email == ""){
@@ -322,6 +344,7 @@ function addContact()
 			zip = " ";
 		}
 	}
+	*/
 
 	//* --------- CONNECT TO THE DATABASE THRU API -----------*/
   	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:formated_phone, streetAddress:address, city:city, state:state, zip:zip};
