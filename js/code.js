@@ -141,8 +141,6 @@ function readCookie()
 
 
 
-
-
 /*============================================*/
 /*=============== LANDING PAGE ===============*/
 /*============================================*/
@@ -188,7 +186,9 @@ window.onclick = function(event) {
 		edit = 2;
   	}
 }
+/* ---- END OF MODAL (POP-UP CONTACT FORM) ---- */
 
+/* =============== EDIT CONTACT ================= */
 function editContact(){
 	let tmp = {ID: contactID, userId: userId};
   	let jsonPayload = JSON.stringify( tmp );
@@ -207,8 +207,7 @@ function editContact(){
 				document.getElementById("addContactResult").innerHTML = "";
 				let jsonObject = JSON.parse( xhr.responseText );
 				// GET THE RESULT FROM THE DATABASE
-				contactList = jsonObject.results;
-
+				let contactList = jsonObject.results;
 				console.log(contactList[0].firstName);
 
 				// GET THE DETAILS FROM THE JSON OBJECT
@@ -277,7 +276,7 @@ function clearContactFormField(){
 
 	addContactButton.innerText = 'Add Contact';
 }
-
+/* =============== END OF EDIT CONTACT ================= */
 
 /* =============== ADD CONTACT ================= */
 function addContact()
@@ -403,9 +402,14 @@ function deleteContact(contactID)
 		console.log(err);
 	}
 }
-
+/* =============== END OF DELETE CONTACT ================= */
 
 /*=============== DISPLAY CONTACTS TO THE TABLE ===============*/
+/*---- LAZY LOADING IMPLEMENTED, LOADS 13 CONTACTS ONLY UNLESS REQUESTED ----*/
+let contactList = [];
+let stopIndex = 0;
+let remainingContacts = 0;
+
 function showTable(){
 	let tmp = {userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
@@ -437,44 +441,23 @@ function showTable(){
 				})
 
 				// Insert data to the table
-				var html = document.getElementById("contactTable").innerHTML
+				var html = "";
 				// Populate table
-				for( let i=0; i<jsonObject.results.length; i++ )
-				{
-					if ((contactList[i].streetAddress == " " || contactList[i].city == " " || contactList[i].state == " " || contactList[i].zip == " ") ||
-						(contactList[i].streetAddress == "" || contactList[i].city == "" || contactList[i].state == "" || contactList[i].zip == "")){
-						var address = contactList[i].streetAddress + " " + contactList[i].city + " " + contactList[i].state + " " + contactList[i].zip;
-					}
-					else {
-						var address = contactList[i].streetAddress + ", " + contactList[i].city + ", " + contactList[i].state + " " + contactList[i].zip;			
-					}
+				remainingContacts = contactList.length;		// Tracks the remaining contacts
 
-					var fullName = contactList[i].firstName + " " + contactList[i].lastName;
-					var phoneNumber = contactList[i].phoneNumber;
-					var email = contactList[i].email;
-					
-					var edit = "<td>"+
-									"<label for='editContact'>"+
-										"<svg class='iconTable' onclick='editClicked(" + contactList[i].ID + ");'>"+
-										"<use xlink:href='#icon-edit'></use>"+
-									"</label>"+
-									"<label> </label>"+
-									"<label for='deleteContact'>"+
-										"<svg class='iconTable' href = '#' onclick='editClicked(this);'>"+
-										"<use xlink:href='#icon-delete'></use>"+
-									"</label>"+
-								"</td>";
-
-					var row = "";
-					row += '<tr><td>' + fullName + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + address + edit;
-
-					// get the current table body html as a string, and append the new row
-					html += row;
-
+				// Implement Lazy Load
+				if(contactList.length > 13){
+					html = lazyLoad();
+					// Show load more button
+					let element = document.getElementById("js-lazy-load");
+					element.removeAttribute("hidden");
+				}
+				// No lazy loading required
+				else{
+					html = normalLoad()
 				}
 				// set the table body to the new html code
 				document.getElementById("contactTable").innerHTML = html;
-
 			}
 		};
 		xhr.send(jsonPayload);
@@ -484,6 +467,67 @@ function showTable(){
 		document.getElementById("colorSearchResult").innerHTML = err.message;
 	}
 
+}
+
+// No lazy loading required
+function normalLoad(){
+	var html = document.getElementById("contactTable").innerHTML
+	for( let i=0; i<contactList.length; i++ )
+	{
+		row = appendRow(i)
+		// get the current table body html as a string, and append the new row
+		html += row;
+	}
+	return html;
+}
+
+// Perform lazy loading
+function lazyLoad(){
+	var html = document.getElementById("contactTable").innerHTML
+
+	for( let i=0; i<13; i++ )
+	{
+		row = appendRow(i)
+		// get the current table body html as a string, and append the new row
+		html += row;
+		stopIndex = i;
+		
+		remainingContacts--;
+	}
+	console.log("stopIndex: " + stopIndex);
+	return html;
+}
+
+// Insert contacts to the table
+function appendRow(i){
+	if ((contactList[i].streetAddress == " " || contactList[i].city == " " || contactList[i].state == " " || contactList[i].zip == " ") ||
+		(contactList[i].streetAddress == "" || contactList[i].city == "" || contactList[i].state == "" || contactList[i].zip == "")){
+		var address = contactList[i].streetAddress + " " + contactList[i].city + " " + contactList[i].state + " " + contactList[i].zip;
+	}
+	else {
+		var address = contactList[i].streetAddress + ", " + contactList[i].city + ", " + contactList[i].state + " " + contactList[i].zip;			
+	}
+
+	var fullName = contactList[i].firstName + " " + contactList[i].lastName;
+	var phoneNumber = contactList[i].phoneNumber;
+	var email = contactList[i].email;
+	
+	var edit = "<td>"+
+					"<label for='editContact'>"+
+						"<svg class='iconTable' onclick='editClicked(" + contactList[i].ID + ");'>"+
+						"<use xlink:href='#icon-edit'></use>"+
+					"</label>"+
+					"<label> </label>"+
+					"<label for='deleteContact'>"+
+						"<svg class='iconTable' href = '#' onclick='editClicked(this);'>"+
+						"<use xlink:href='#icon-delete'></use>"+
+					"</label>"+
+				"</td>";
+
+	var row = "";
+	row += '<tr><td>' + fullName + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + address + edit;
+
+	return row;
 }
 
 
@@ -504,3 +548,55 @@ function compareStrings(a, b) {
 
 	return (a < b) ? -1 : (a > b) ? 1 : 0;
 }
+
+/*========== LAZY LOADING ==================*/
+$(function(){
+	$('#js-lazy-load').click(function () {
+		
+		let i = stopIndex;
+		let counter = 0;
+		while(i < contactList.length || counter > 13){
+			console.log('stopIndex: ' +i );
+			console.log('contactList.length: ' +contactList.length );
+
+			if (contactList[i].streetAddress == "" || contactList[i].city == "" || contactList[i].state == "" || contactList[i].zip == ""){
+				var address = contactList[i].streetAddress + " " + contactList[i].city + " " + contactList[i].state + " " + contactList[i].zip;
+			}
+			else {
+				var address = contactList[i].streetAddress + ", " + contactList[i].city + ", " + contactList[i].state + " " + contactList[i].zip;			
+			}
+			var fullName = contactList[i].firstName + " " + contactList[i].lastName;
+			var phoneNumber = contactList[i].phoneNumber;
+			var email = contactList[i].email;
+			
+			var edit = "<td>"+
+							"<label for='editContact'>"+
+								"<svg class='iconTable' onclick='editClicked(" + contactList[i].ID + ");'>"+
+								"<use xlink:href='#icon-edit'></use>"+
+							"</label>"+
+							"<label> </label>"+
+							"<label for='deleteContact'>"+
+								"<svg class='iconTable' href = '#' onclick='editClicked(this);'>"+
+								"<use xlink:href='#icon-delete'></use>"+
+							"</label>"+
+						"</td>";
+
+			var row = "";
+			row += '<tr><td>' + fullName + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + address + edit;
+
+			$('#contactTable tbody').append(row);
+			i++;
+			counter++;
+			stopIndex= i;
+			
+			remainingContacts--;
+		}
+		// Hide the load more button
+		if(remainingContacts < 9){
+			let element = document.getElementById("js-lazy-load");
+			element.setAttribute("hidden", "hidden");
+			console.log("Remaining: " + remainingContacts);
+		}
+	});
+});
+/*=============== END OF DISPLAY CONTACTS TO THE TABLE ===============*/

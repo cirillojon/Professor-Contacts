@@ -1,4 +1,3 @@
-
 @charset "UTF-8";
 * {
   margin: 0;
@@ -274,8 +273,6 @@ body {
   cursor: pointer;
 }
 
-
-
 .helloMessage {
   color: white;
   font-size: 16px;
@@ -290,10 +287,10 @@ body {
   margin-right: auto;
   margin-left: auto;
   margin-top: -30px;
-  background: #e54128;
-  border-radius: 15px;
+  background: transparent;
+  border-radius: 2em;
   width: 92%;
-  height: auto;
+
 }
 
 .table-sortable {
@@ -304,8 +301,7 @@ body {
   margin: 25px 0;
   font-size: 14px;
   min-width: 400px;
-  border-radius: 15px;
-  overflow: hidden;
+  
 }
 
 .table-sortable tbody tr:hover {
@@ -318,6 +314,7 @@ body {
   color: #ffffff;
   text-align: left;
   font-weight: bold;
+  border-radius: 1em 1em 0em 0em;
 }
 
 .table-sortable th,
@@ -337,23 +334,87 @@ body {
   cursor: pointer;
 }
 
-.table-sortable .th-sort-asc::after {
-  content: "▴";
+
+/*======SCROLLABLE TABLE==============*/
+.header-fixed {
+    width: 100%;
 }
 
-.table-sortable .th-sort-desc::after {
-  content: "▾";
+.header-fixed > thead,
+.header-fixed > tbody,
+.header-fixed > thead > tr,
+.header-fixed > tbody > tr,
+.header-fixed > thead > tr > th,
+.header-fixed > tbody > tr > td {
+    display: block;
 }
 
-.table-sortable .th-sort-asc::after,
-.table-sortable .th-sort-desc::after {
-  margin-left: 5px;
+.header-fixed > tbody > tr:after,
+.header-fixed > thead > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
 }
 
-.table-sortable .th-sort-asc,
-.table-sortable .th-sort-desc {
-  background: rgba(0, 0, 0, 0.1);
+.header-fixed > tbody {
+    overflow-y: auto;
+    height: 610px;
 }
+
+.header-fixed > tbody > tr > td,
+.header-fixed > thead > tr > th {
+    float: left;
+}
+
+td:nth-child(1) {
+  width: 15%;
+  }
+td:nth-child(2) {
+  width: 13%;
+}
+td:nth-child(3) {
+  width: 25%;
+ }
+td:nth-child(4) {
+  width: 40%;
+ }
+td:nth-child(5) {
+  width: 7%;
+ }
+
+.buttonTable {
+  /* Background */
+  background-image: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  
+  outline: 0;
+  padding: 0;
+  -webkit-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+  width: 100%;
+  height: 60px;
+  cursor: pointer;
+  /* Border */
+  border-radius: 0.25rem;
+  border-radius: var(--loginBorderRadus);
+  /* Font */
+  background-color: #4657ce;
+  color: #eee;
+  color: var(--loginSubmitColor);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+
+  margin: auto;
+  
+}
+
+/*88888888888888888888888888888*/
 
 .iconTable {
   height: 1em;
@@ -664,3 +725,5 @@ input,
 .text--center {
   text-align: center;
 }
+
+/*==================*/

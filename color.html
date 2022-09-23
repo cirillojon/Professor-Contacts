@@ -82,17 +82,18 @@
       </div>
 
       <!--TABLE RESULTS-->
-      <div class = "tableResult">
-        <table class="table-sortable" id="contactTable">
+      <div class = "tableResult table-responsive">
+        <table class="table-sortable header-fixed" id="contactTable">
           <thead>
             <tr>
             </tr>
+          <tbody id = "js-lazy-load-data"/>
         </table>
 
 
-        <span id ="colorSearchResult"></span>
-
-      </div>
+        <div id="content"/>
+        <button type = 'button' class = "buttonTable" id = 'js-lazy-load' hidden="hidden">LOAD MORE!</button>
+        </div>
       
       <!-- CREATE ACCOUNT Modal -->
       <div id="id01" class="modal">
@@ -282,7 +283,8 @@
       </symbol> 
     </svg>
 
-    <script src="js/code.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/code.js"></script>
   </body>
 </html>
