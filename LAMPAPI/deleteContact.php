@@ -30,7 +30,7 @@
 			$stmt->bind_param("ii", $ID, $userId);
 			$stmt->execute();
 
-			returnWithError("No error, Succesful");
+			returnWithError("");
 		}
 		else
 		{

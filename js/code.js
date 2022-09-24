@@ -436,7 +436,7 @@ function showTable(){
 				// Get the results from the database
 				contactList = jsonObject.results;
 				// Sort the resort by first name (ascending order)
-				contactList.sort(function(a, b) {
+				contactList = contactList.sort(function(a, b) {
 					return compareStrings(a.firstName, b.firstName);
 				})
 
@@ -447,14 +447,14 @@ function showTable(){
 
 				// Implement Lazy Load
 				if(contactList.length > 13){
-					html = lazyLoad();
+					html = lazyLoad(contactList);
 					// Show load more button
 					let element = document.getElementById("js-lazy-load");
 					element.removeAttribute("hidden");
 				}
 				// No lazy loading required
 				else{
-					html = normalLoad()
+					html = normalLoad(contactList)
 				}
 				// set the table body to the new html code
 				document.getElementById("contactTable").innerHTML = html;
@@ -470,11 +470,11 @@ function showTable(){
 }
 
 // No lazy loading required
-function normalLoad(){
+function normalLoad(contactList){
 	var html = document.getElementById("contactTable").innerHTML
 	for( let i=0; i<contactList.length; i++ )
 	{
-		row = appendRow(i)
+		row = appendRow(contactList, i)
 		// get the current table body html as a string, and append the new row
 		html += row;
 	}
@@ -482,12 +482,12 @@ function normalLoad(){
 }
 
 // Perform lazy loading
-function lazyLoad(){
+function lazyLoad(contactList){
 	var html = document.getElementById("contactTable").innerHTML
 
 	for( let i=0; i<13; i++ )
 	{
-		row = appendRow(i)
+		row = appendRow(contactList, i)
 		// get the current table body html as a string, and append the new row
 		html += row;
 		stopIndex = i;
@@ -499,7 +499,7 @@ function lazyLoad(){
 }
 
 // Insert contacts to the table
-function appendRow(i){
+function appendRow(contactList, i){
 	if ((contactList[i].streetAddress == " " || contactList[i].city == " " || contactList[i].state == " " || contactList[i].zip == " ") ||
 		(contactList[i].streetAddress == "" || contactList[i].city == "" || contactList[i].state == "" || contactList[i].zip == "")){
 		var address = contactList[i].streetAddress + " " + contactList[i].city + " " + contactList[i].state + " " + contactList[i].zip;
@@ -552,12 +552,13 @@ function compareStrings(a, b) {
 /*========== LAZY LOADING ==================*/
 $(function(){
 	$('#js-lazy-load').click(function () {
-		
 		let i = stopIndex;
 		let counter = 0;
-		while(i < contactList.length || counter > 13){
+		while(i < contactList.length && counter < 13){
 			console.log('stopIndex: ' +i );
 			console.log('contactList.length: ' +contactList.length );
+			console.log("Counter: " + counter);
+
 
 			if (contactList[i].streetAddress == "" || contactList[i].city == "" || contactList[i].state == "" || contactList[i].zip == ""){
 				var address = contactList[i].streetAddress + " " + contactList[i].city + " " + contactList[i].state + " " + contactList[i].zip;
@@ -590,13 +591,74 @@ $(function(){
 			stopIndex= i;
 			
 			remainingContacts--;
+			
 		}
 		// Hide the load more button
 		if(remainingContacts < 9){
 			let element = document.getElementById("js-lazy-load");
 			element.setAttribute("hidden", "hidden");
 			console.log("Remaining: " + remainingContacts);
+			
 		}
 	});
 });
 /*=============== END OF DISPLAY CONTACTS TO THE TABLE ===============*/
+
+function searchContact()
+{	
+	let first = document.getElementById("firstName").value;
+	let last = document.getElementById("lastName").value;
+
+	let email = document.getElementById("emailAddress").value;
+	let phone = document.getElementById("phoneNumber").value;
+
+	let address = document.getElementById("streetAddress").value;
+	let city = document.getElementById("city").value;
+	let state = document.getElementById("state").value;
+	let zip = document.getElementById("zip").value;
+	
+	//let srch = document.getElementById("searchQueryInput").value;
+	//document.getElementById("searchQuerySubmit").innerHTML = "";
+	
+	//let colorList = "";
+	let searchList = "";
+
+	//let tmp = {search:srch,userId:userId};
+	//let jsonPayload = JSON.stringify( tmp );
+	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:phone, streetAddress:address, city:city, state:state, zip:zip};
+  	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + '/SearchContact.' + extension;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 200) 
+			{
+				document.getElementById("contactSearchResult").innerHTML = "The contact you requested is found";
+				let jsonObject = JSON.parse( xhr.responseText );
+				
+				for( let i=0; i<jsonObject.results.length; i++ )
+				{
+					searchList += jsonObject.results[i];
+					if( i < jsonObject.results.length - 1 )
+					{
+						searchList += "<br />\r\n";
+					}
+				}
+				
+				document.getElementsByTagName("p")[0].innerHTML = searchList;
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("contactSearchResult").innerHTML = err.message;
+	}
+	
+}

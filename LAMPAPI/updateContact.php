@@ -31,7 +31,7 @@
         $stmt->close();
         $conn->close();
 
-        returnWithError("SUCCESSFUL, NO ERRORS");
+        returnWithError("");
 	}
 
 	function getRequestInfo()
