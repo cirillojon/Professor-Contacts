@@ -157,18 +157,28 @@ toggle.addEventListener("click", () => {
 
 /* ---- MODAL (POP-UP CONTACT FORM) ---- */
 function addClicked(){
+	// Set the onclick function to addContact();
+	document.getElementById('addContactButton').setAttribute( "onClick", "addContact()" );
+	document.getElementById("addContactResult").innerHTML = "";
   edit = 0;
   document.getElementById('id01').style.display='block';
+  
 }
 
 let edit = 0;		// edit == 1 (Edit button was clicked), edit == 0 (Add contact button was clicked)
 let contactID = 0;	// Stores the contact ID 
+let stopShowingEditContact = 0;
 function editClicked(ID){
 	contactID = ID;
-	console.log("contactID : ",contactID);
-
+	console.log("contactID : " + contactID);
+	stopShowingEditContact = 0;
+	
+	// Set the onclick function to updateContact();
+	document.getElementById('addContactButton').setAttribute( "onClick", "updateContact(contactID)" );
+	document.getElementById("addContactResult").innerHTML = "";
 	edit = 1;
   	document.getElementById('id01').style.display='block';
+	
 }
 
 var modal = document.getElementById('id01');
@@ -178,7 +188,7 @@ window.onclick = function(event) {
 		modal.style.display = "none";
 	}
 
-  	if (edit == 1){
+  	if (edit == 1 && stopShowingEditContact == 0){
 		editContact();
 	}
 	else if (edit == 0){
@@ -250,8 +260,6 @@ function editContact(){
 				document.getElementById("state").value = oldState;
 				document.getElementById("zip").value = oldZip;
 
-				
-
 				addContactButton.innerText = 'Update Contact';
 			}
 		};
@@ -262,6 +270,86 @@ function editContact(){
   		document.getElementById("addContactResult").innerHTML = err.message;
   	}
 }
+
+function updateContact(contactID){
+	stopShowingEditContact = 1;	// Removes the bug of calling editContacts() even though we want to update
+	console.log("UPDATE CONTACT: " + contactID);
+	// Get the inputs
+	let first = document.getElementById("firstName").value;
+	let last = document.getElementById("lastName").value;
+	let email = document.getElementById("emailAddress").value;
+	let phone = document.getElementById("phoneNumber").value;
+	let address = document.getElementById("streetAddress").value;
+	let city = document.getElementById("city").value;
+	let state = document.getElementById("state").value;
+	let zip = document.getElementById("zip").value;
+
+	console.log(zip);
+
+	document.getElementById("addContactResult").innerHTML = "";
+
+	
+	// --------- CHECK USER INPUT -----------//
+	// Only check if first, last name, and phone fields is not empty
+	if(first == "" || last == "" || phone == ""){
+		document.getElementById("addContactResult").innerHTML = "One of the required* fields is incomplete";
+		document.getElementById("addContactResult").style.color = '#E02745';
+		return;
+	}
+
+	// If they put an email, check if it is a valid ID
+	if (email != "" && !validEmail(email)){
+		document.getElementById("addContactResult").innerHTML = "Email not supported";
+		document.getElementById("addContactResult").style.color = '#E02745';
+		return;
+	}
+
+	// Validate Zip
+	if (zip != "" && !validZip(zip)){
+		document.getElementById("addContactResult").innerHTML = "Please enter a valid zip";
+		document.getElementById("addContactResult").style.color = '#E02745';
+		return;
+	}
+
+	// Validate the phone number	
+	if (!validPhone(phone)){
+		document.getElementById("addContactResult").innerHTML = "Please enter a valid phone number (digits only, no space)";
+		document.getElementById("addContactResult").style.color = '#E02745';
+		return;
+	}
+	formated_phone = "("+phone.substring(0,3)+")"+phone.substring(3,6)+"-"+phone.substring(6,11)
+	
+
+	//* --------- CONNECT TO THE DATABASE THRU API -----------*/
+  	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:phone, streetAddress:address, city:city, state:state, zip:zip, ID: contactID};
+  	let jsonPayload = JSON.stringify( tmp );
+
+	
+  	let url = urlBase + '/updateContact.' + extension;
+
+  	let xhr = new XMLHttpRequest();
+  	xhr.open("POST", url, true);
+  	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+  	try
+  	{
+  		xhr.onreadystatechange = function()
+  		{
+  			if (this.readyState == 4 && this.status == 200)
+  			{
+				document.getElementById("addContactResult").innerHTML = "Contact successfully updated!";
+				document.getElementById("addContactResult").style.color = 'green';
+				
+				showTable();	// Show added contact to the table
+			}
+		};
+		xhr.send(jsonPayload);
+  	}
+  	catch(err)
+  	{
+  		document.getElementById("addContactResult").innerHTML = err.message;
+  	}
+}
+
 
 function clearContactFormField(){
 	// Clear input fields
@@ -291,6 +379,8 @@ function addContact()
 	let state = document.getElementById("state").value;
 	let zip = document.getElementById("zip").value;
 
+	console.log(zip);
+
 	document.getElementById("addContactResult").innerHTML = "";
 
 	//* --------- CHECK USER INPUT -----------*/
@@ -309,7 +399,7 @@ function addContact()
 	}
 
 	// Validate Zip
-	if (zip != "" && validZip(zip)){
+	if (zip != "" && !validZip(zip)){
 		document.getElementById("addContactResult").innerHTML = "Please enter a valid zip";
 		document.getElementById("addContactResult").style.color = '#E02745';
 		return;
@@ -365,7 +455,8 @@ function validPhone(p) {
   }
 
   function validZip(zip) {
-	return /^\d{5}(-\d{4})?$/.test(zip);
+	var isValidZip = /^(?:\d{5})?$/.test(zip);
+	return isValidZip;
  }
 /* =============== END OF ADD CONTACT ================= */
 
@@ -604,54 +695,59 @@ $(function(){
 });
 /*=============== END OF DISPLAY CONTACTS TO THE TABLE ===============*/
 
-function searchContact()
+function searchContacts()
 {	
-	let first = document.getElementById("firstName").value;
-	let last = document.getElementById("lastName").value;
+	let srch = document.getElementById("searchQueryInput").value;
+	console.log(srch);
+	let searchList = [];
 
-	let email = document.getElementById("emailAddress").value;
-	let phone = document.getElementById("phoneNumber").value;
+	let tmp = {search:srch,userId:userId};
+	let jsonPayload = JSON.stringify( tmp );
 
-	let address = document.getElementById("streetAddress").value;
-	let city = document.getElementById("city").value;
-	let state = document.getElementById("state").value;
-	let zip = document.getElementById("zip").value;
-	
-	//let srch = document.getElementById("searchQueryInput").value;
-	//document.getElementById("searchQuerySubmit").innerHTML = "";
-	
-	//let colorList = "";
-	let searchList = "";
-
-	//let tmp = {search:srch,userId:userId};
-	//let jsonPayload = JSON.stringify( tmp );
-	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:phone, streetAddress:address, city:city, state:state, zip:zip};
-  	let jsonPayload = JSON.stringify( tmp );
-
-	let url = urlBase + '/SearchContact.' + extension;
+	let url = urlBase + '/searchContact.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 	try
 	{
-		xhr.onreadystatechange = function() 
+		xhr.onreadystatechange = function()
 		{
-			if (this.readyState == 4 && this.status == 200) 
+			if (this.readyState == 4 && this.status == 200)
 			{
-				document.getElementById("contactSearchResult").innerHTML = "The contact you requested is found";
 				let jsonObject = JSON.parse( xhr.responseText );
+
+				var Table = document.getElementById("contactTable");
+				Table.innerHTML = "<thead><tr></tr>";
+
+				// Insert the header for the table
+				setHeader();
 				
-				for( let i=0; i<jsonObject.results.length; i++ )
-				{
-					searchList += jsonObject.results[i];
-					if( i < jsonObject.results.length - 1 )
-					{
-						searchList += "<br />\r\n";
-					}
+				// Get the results from the database
+				searchList = jsonObject.results;
+				// Sort the resort by first name (ascending order)
+				searchList = searchList.sort(function(a, b) {
+					return compareStrings(a.firstName, b.firstName);
+				})
+
+				// Insert data to the table
+				var html = "";
+				// Populate table
+				remainingContacts = searchList.length;		// Tracks the remaining contacts
+
+				// Implement Lazy Load
+				if(searchList.length > 13){
+					html = lazyLoad(contactList);
+					// Show load more searchList
+					let element = document.getElementById("js-lazy-load");
+					element.removeAttribute("hidden");
 				}
-				
-				document.getElementsByTagName("p")[0].innerHTML = searchList;
+				// No lazy loading required
+				else{
+					html = normalLoad(searchList)
+				}
+				// set the table body to the new html code
+				document.getElementById("contactTable").innerHTML = html;
 			}
 		};
 		xhr.send(jsonPayload);

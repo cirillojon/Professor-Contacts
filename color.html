@@ -94,6 +94,22 @@
         <div id="content"/>
         <button type = 'button' class = "buttonTable" id = 'js-lazy-load' hidden="hidden">LOAD MORE!</button>
         </div>
+    
+    <!-- DELETE CONTACT Modal -->
+    <div id="id02" class="modal">
+        <form class="modal-content login" action="/action_page.php">
+            <div class="grid">
+                
+                <p align="center" style="padding: 0 15px 15px">Are you sure? This cannot be undone.</p>
+                
+                <span id="deleteContactResult"></span>
+                <div class="form__field">
+                    <button type="button" class="buttons" id="deleteContactButton" onclick="deleteContact(this);">Delete This Contact</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
       
       <!-- CREATE ACCOUNT Modal -->
       <div id="id01" class="modal">
