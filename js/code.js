@@ -408,12 +408,10 @@ function addContact()
 		document.getElementById("addContactResult").style.color = '#E02745';
 		return;
 	}
-	formated_phone = "("+phone.substring(0,3)+")"+phone.substring(3,6)+"-"+phone.substring(6,11)
-	console.log(formated_phone);
 
 
 	//* --------- CONNECT TO THE DATABASE THRU API -----------*/
-  	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:formated_phone, streetAddress:address, city:city, state:state, zip:zip};
+  	let tmp = {userId: userId, firstName:first, lastName:last, email:email, phoneNumber:phone, streetAddress:address, city:city, state:state, zip:zip};
   	let jsonPayload = JSON.stringify( tmp );
 	
   	let url = urlBase + '/addContact.' + extension;
@@ -524,29 +522,38 @@ function searchContacts()
 				
 				// Get the results from the database
 				searchList = jsonObject.results;
-				// Sort the resort by first name (ascending order)
-				searchList = searchList.sort(function(a, b) {
-					return compareStrings(a.firstName, b.firstName);
-				})
 
-				// Insert data to the table
-				var html = "";
-				// Populate table
-				remainingContacts = searchList.length;		// Tracks the remaining contacts
+				if (!!searchList){
+					// Sort the resort by first name (ascending order)
+					searchList = searchList.sort(function(a, b) {
+						return compareStrings(a.firstName, b.firstName);
+					})
 
-				// Implement Lazy Load
-				if(searchList.length > 13){
-					html = lazyLoad(contactList);
-					// Show load more searchList
-					let element = document.getElementById("js-lazy-load");
-					element.removeAttribute("hidden");
+					// Insert data to the table
+					var html = "";
+					// Populate table
+					remainingContacts = searchList.length;		// Tracks the remaining contacts
+
+					// Implement Lazy Load
+					if(searchList.length > 13){
+						html = lazyLoad(contactList);
+						// Show load more searchList
+						let element = document.getElementById("js-lazy-load");
+						element.removeAttribute("hidden");
+					}
+					// No lazy loading required
+					else{
+						html = normalLoad(searchList)
+
+						hideLoadMoreButton();
+					}
+					// set the table body to the new html code
+					document.getElementById("contactTable").innerHTML = html;
 				}
-				// No lazy loading required
 				else{
-					html = normalLoad(searchList)
+					hideLoadMoreButton();
 				}
-				// set the table body to the new html code
-				document.getElementById("contactTable").innerHTML = html;
+				
 			}
 		};
 		xhr.send(jsonPayload);
@@ -589,29 +596,37 @@ function showTable(){
 				
 				// Get the results from the database
 				contactList = jsonObject.results;
-				// Sort the resort by first name (ascending order)
-				contactList = contactList.sort(function(a, b) {
-					return compareStrings(a.firstName, b.firstName);
-				})
 
-				// Insert data to the table
-				var html = "";
-				// Populate table
-				remainingContacts = contactList.length;		// Tracks the remaining contacts
+				if(!!contactList){
+					// Sort the resort by first name (ascending order)
+					contactList = contactList.sort(function(a, b) {
+						return compareStrings(a.firstName, b.firstName);
+					})
 
-				// Implement Lazy Load
-				if(contactList.length > 13){
-					html = lazyLoad(contactList);
-					// Show load more button
-					let element = document.getElementById("js-lazy-load");
-					element.removeAttribute("hidden");
+					// Insert data to the table
+					var html = "";
+					// Populate table
+					remainingContacts = contactList.length;		// Tracks the remaining contacts
+
+					// Implement Lazy Load
+					if(contactList.length > 13){
+						html = lazyLoad(contactList);
+						// Show load more button
+						let element = document.getElementById("js-lazy-load");
+						element.removeAttribute("hidden");
+					}
+					// No lazy loading required
+					else{
+						html = normalLoad(contactList)
+
+						hideLoadMoreButton();
+					}
+					// set the table body to the new html code
+					document.getElementById("contactTable").innerHTML = html;
 				}
-				// No lazy loading required
 				else{
-					html = normalLoad(contactList)
+					hideLoadMoreButton();
 				}
-				// set the table body to the new html code
-				document.getElementById("contactTable").innerHTML = html;
 			}
 		};
 		xhr.send(jsonPayload);
@@ -621,6 +636,11 @@ function showTable(){
 		document.getElementById("colorSearchResult").innerHTML = err.message;
 	}
 
+}
+
+function hideLoadMoreButton(){
+	let element = document.getElementById("js-lazy-load");
+	element.setAttribute("hidden", "hidden");
 }
 
 // No lazy loading required
@@ -663,7 +683,10 @@ function appendRow(contactList, i){
 	}
 
 	var fullName = contactList[i].firstName + " " + contactList[i].lastName;
+
 	var phoneNumber = contactList[i].phoneNumber;
+	formated_phone = "("+phoneNumber.substring(0,3)+")"+phoneNumber.substring(3,6)+"-"+phoneNumber.substring(6,11);
+
 	var email = contactList[i].email;
 	
 	var edit = "<td>"+
@@ -679,7 +702,7 @@ function appendRow(contactList, i){
 				"</td>";
 
 	var row = "";
-	row += '<tr><td>' + fullName + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + address + edit;
+	row += '<tr><td>' + fullName + '</td><td>' + formated_phone + '</td><td>' + email + '</td><td>' + address + edit;
 
 	return row;
 }
@@ -720,7 +743,10 @@ $(function(){
 				var address = contactList[i].streetAddress + ", " + contactList[i].city + ", " + contactList[i].state + " " + contactList[i].zip;			
 			}
 			var fullName = contactList[i].firstName + " " + contactList[i].lastName;
+			
 			var phoneNumber = contactList[i].phoneNumber;
+			formated_phone = "("+phoneNumber.substring(0,3)+")"+phoneNumber.substring(3,6)+"-"+phoneNumber.substring(6,11);
+
 			var email = contactList[i].email;
 			
 			var edit = "<td>"+
@@ -736,7 +762,7 @@ $(function(){
 						"</td>";
 
 			var row = "";
-			row += '<tr><td>' + fullName + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + address + edit;
+			row += '<tr><td>' + fullName + '</td><td>' + formated_phone + '</td><td>' + email + '</td><td>' + address + edit;
 
 			$('#contactTable tbody').append(row);
 			i++;
@@ -748,10 +774,7 @@ $(function(){
 		}
 		// Hide the load more button
 		if(remainingContacts < 9){
-			let element = document.getElementById("js-lazy-load");
-			element.setAttribute("hidden", "hidden");
-			console.log("Remaining: " + remainingContacts);
-			
+			hideLoadMoreButton();
 		}
 	});
 });
