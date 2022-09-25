@@ -94,7 +94,6 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
-
 function saveCookie()
 {
 	let minutes = 20;
@@ -140,7 +139,6 @@ function readCookie()
 }
 
 
-
 /*============================================*/
 /*=============== LANDING PAGE ===============*/
 /*============================================*/
@@ -156,18 +154,19 @@ toggle.addEventListener("click", () => {
 
 
 /* ---- MODAL (POP-UP CONTACT FORM) ---- */
+let edit = 0;		// edit == 1 (Edit button was clicked), edit == 0 (Add contact button was clicked)
+let contactID = 0;	// Stores the contact ID 
+let stopShowingEditContact = 0;
+
 function addClicked(){
 	// Set the onclick function to addContact();
 	document.getElementById('addContactButton').setAttribute( "onClick", "addContact()" );
 	document.getElementById("addContactResult").innerHTML = "";
-  edit = 0;
-  document.getElementById('id01').style.display='block';
+	edit = 0;
+	document.getElementById('id01').style.display='block';
   
 }
 
-let edit = 0;		// edit == 1 (Edit button was clicked), edit == 0 (Add contact button was clicked)
-let contactID = 0;	// Stores the contact ID 
-let stopShowingEditContact = 0;
 function editClicked(ID){
 	contactID = ID;
 	console.log("contactID : " + contactID);
@@ -178,7 +177,6 @@ function editClicked(ID){
 	document.getElementById("addContactResult").innerHTML = "";
 	edit = 1;
   	document.getElementById('id01').style.display='block';
-	
 }
 
 var modal = document.getElementById('id01');
@@ -350,7 +348,6 @@ function updateContact(contactID){
   	}
 }
 
-
 function clearContactFormField(){
 	// Clear input fields
 	document.getElementById("firstName").value = "";
@@ -468,9 +465,9 @@ function deleteContact(contactID)
 	if(!flag){
 		return;
 	}
-	let tmp = {ID:contactID};
+	let tmp = {ID:contactID, userId: userId};
 	let jsonPayload = JSON.stringify( tmp );
-	let url = urlBase + '/DeleteContact.' + extension;
+	let url = urlBase + '/deleteContact.' + extension;
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
@@ -481,8 +478,9 @@ function deleteContact(contactID)
 		{
 			if (this.readyState == 4 && this.status == 200)
 			{
-				console.log("deleted ID"+contactID);
-				window.location.reload();
+				console.log("deleted ID: "+contactID);
+				//window.location.reload();
+				showTable();
 			}
 		};
 		xhr.send(jsonPayload);
@@ -494,6 +492,71 @@ function deleteContact(contactID)
 	}
 }
 /* =============== END OF DELETE CONTACT ================= */
+
+/* =============== SEARCH CONTACTS ================= */
+function searchContacts()
+{	
+	let srch = document.getElementById("searchQueryInput").value;
+	console.log(srch);
+	let searchList = [];
+
+	let tmp = {search:srch,userId:userId};
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + '/searchContact.' + extension;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function()
+		{
+			if (this.readyState == 4 && this.status == 200)
+			{
+				let jsonObject = JSON.parse( xhr.responseText );
+
+				var Table = document.getElementById("contactTable");
+				Table.innerHTML = "<thead><tr></tr>";
+
+				// Insert the header for the table
+				setHeader();
+				
+				// Get the results from the database
+				searchList = jsonObject.results;
+				// Sort the resort by first name (ascending order)
+				searchList = searchList.sort(function(a, b) {
+					return compareStrings(a.firstName, b.firstName);
+				})
+
+				// Insert data to the table
+				var html = "";
+				// Populate table
+				remainingContacts = searchList.length;		// Tracks the remaining contacts
+
+				// Implement Lazy Load
+				if(searchList.length > 13){
+					html = lazyLoad(contactList);
+					// Show load more searchList
+					let element = document.getElementById("js-lazy-load");
+					element.removeAttribute("hidden");
+				}
+				// No lazy loading required
+				else{
+					html = normalLoad(searchList)
+				}
+				// set the table body to the new html code
+				document.getElementById("contactTable").innerHTML = html;
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("contactSearchResult").innerHTML = err.message;
+	}
+}
+/* =============== END OF SEARCH CONTACTS ================= */
 
 /*=============== DISPLAY CONTACTS TO THE TABLE ===============*/
 /*---- LAZY LOADING IMPLEMENTED, LOADS 13 CONTACTS ONLY UNLESS REQUESTED ----*/
@@ -610,7 +673,7 @@ function appendRow(contactList, i){
 					"</label>"+
 					"<label> </label>"+
 					"<label for='deleteContact'>"+
-						"<svg class='iconTable' href = '#' onclick='editClicked(this);'>"+
+						"<svg class='iconTable' href = '#' onclick='deleteContact(" + contactList[i].ID + ");'>"+
 						"<use xlink:href='#icon-delete'></use>"+
 					"</label>"+
 				"</td>";
@@ -620,7 +683,6 @@ function appendRow(contactList, i){
 
 	return row;
 }
-
 
 // INSERT HEADERS TO THE TABLE
 function setHeader() {
@@ -668,7 +730,7 @@ $(function(){
 							"</label>"+
 							"<label> </label>"+
 							"<label for='deleteContact'>"+
-								"<svg class='iconTable' href = '#' onclick='editClicked(this);'>"+
+								"<svg class='iconTable' href = '#' onclick='deleteContact(" + contactList[i].ID + ");'>"+
 								"<use xlink:href='#icon-delete'></use>"+
 							"</label>"+
 						"</td>";
@@ -694,67 +756,3 @@ $(function(){
 	});
 });
 /*=============== END OF DISPLAY CONTACTS TO THE TABLE ===============*/
-
-function searchContacts()
-{	
-	let srch = document.getElementById("searchQueryInput").value;
-	console.log(srch);
-	let searchList = [];
-
-	let tmp = {search:srch,userId:userId};
-	let jsonPayload = JSON.stringify( tmp );
-
-	let url = urlBase + '/searchContact.' + extension;
-	
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function()
-		{
-			if (this.readyState == 4 && this.status == 200)
-			{
-				let jsonObject = JSON.parse( xhr.responseText );
-
-				var Table = document.getElementById("contactTable");
-				Table.innerHTML = "<thead><tr></tr>";
-
-				// Insert the header for the table
-				setHeader();
-				
-				// Get the results from the database
-				searchList = jsonObject.results;
-				// Sort the resort by first name (ascending order)
-				searchList = searchList.sort(function(a, b) {
-					return compareStrings(a.firstName, b.firstName);
-				})
-
-				// Insert data to the table
-				var html = "";
-				// Populate table
-				remainingContacts = searchList.length;		// Tracks the remaining contacts
-
-				// Implement Lazy Load
-				if(searchList.length > 13){
-					html = lazyLoad(contactList);
-					// Show load more searchList
-					let element = document.getElementById("js-lazy-load");
-					element.removeAttribute("hidden");
-				}
-				// No lazy loading required
-				else{
-					html = normalLoad(searchList)
-				}
-				// set the table body to the new html code
-				document.getElementById("contactTable").innerHTML = html;
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("contactSearchResult").innerHTML = err.message;
-	}
-	
-}
