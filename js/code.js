@@ -695,23 +695,22 @@ $(function(){
 });
 /*=============== END OF DISPLAY CONTACTS TO THE TABLE ===============*/
 
-function searchContacts()
-{	
+function searchContacts() {	
 	let srch = document.getElementById("searchQueryInput").value;
-	console.log(srch);
+	
 	let searchList = [];
 
 	let tmp = {search:srch,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/searchContact.' + extension;
+	let url = urlBase + '/searchContacts.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 	try
 	{
-		xhr.onreadystatechange = function()
+		xhr.onreadystatechange = function() 
 		{
 			if (this.readyState == 4 && this.status == 200)
 			{
@@ -737,8 +736,7 @@ function searchContacts()
 
 				// Implement Lazy Load
 				if(searchList.length > 13){
-					html = lazyLoad(contactList);
-					// Show load more searchList
+					html = lazyLoad(searchList);
 					let element = document.getElementById("js-lazy-load");
 					element.removeAttribute("hidden");
 				}
@@ -756,5 +754,4 @@ function searchContacts()
 	{
 		document.getElementById("contactSearchResult").innerHTML = err.message;
 	}
-	
 }
