@@ -42,6 +42,23 @@ function doRegister()
   		document.getElementById("registerResult").style.color = '#E02745';
   		return;
   	}
+	
+	// Check if username length greater than 5 characters
+	if (userName.length <= 5) {
+		document.getElementById("registerResult").innerHTML = "Username must be greater than 5 characters.";
+		document.getElementById("registerResult").style.color = '#E02745';
+		return;
+	}
+	
+	// Check if password length greater than 7 characters
+	if (password.length <= 7) {
+		document.getElementById("registerResult").innerHTML = "Password must be greater than 7 characters.";
+		document.getElementById("registerResult").style.color = '#E02745';
+		return;
+	}
+	
+	
+	
 
 	hash = md5(password);
   	let tmp = {userName:userName, password: hash, firstName:firstName, lastName:lastName};
