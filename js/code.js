@@ -156,7 +156,7 @@ toggle.addEventListener("click", () => {
 /* ---- MODAL (POP-UP CONTACT FORM) ---- */
 let edit = 0;		// edit == 1 (Edit button was clicked), edit == 0 (Add contact button was clicked)
 let contactID = 0;	// Stores the contact ID 
-let stopShowingEditContact = 0;
+let stopRefreshing = 0;
 
 function addClicked(){
 	// Set the onclick function to addContact();
@@ -170,7 +170,7 @@ function addClicked(){
 function editClicked(ID){
 	contactID = ID;
 	console.log("contactID : " + contactID);
-	stopShowingEditContact = 0;
+	stopRefreshing = 0;
 	
 	// Set the onclick function to updateContact();
 	document.getElementById('addContactButton').setAttribute( "onClick", "updateContact(contactID)" );
@@ -186,7 +186,7 @@ window.onclick = function(event) {
 		modal.style.display = "none";
 	}
 
-  	if (edit == 1 && stopShowingEditContact == 0){
+  	if (edit == 1 && stopRefreshing == 0){
 		editContact();
 	}
 	else if (edit == 0){
@@ -200,7 +200,8 @@ window.onclick = function(event) {
 function editContact(){
 	let tmp = {ID: contactID, userId: userId};
   	let jsonPayload = JSON.stringify( tmp );
-	
+	stopRefreshing = 1;
+	console.log(stopRefreshing);
   	let url = urlBase + '/getContact.' + extension;
 
   	let xhr = new XMLHttpRequest();
@@ -270,9 +271,9 @@ function editContact(){
 }
 
 function updateContact(contactID){
-	stopShowingEditContact = 1;	// Removes the bug of calling editContacts() even though we want to update
+	stopRefreshing = 1;	// Removes the bug of calling addContacts() even though we want to update
 	console.log("UPDATE CONTACT: " + contactID);
-	// Get the inputs
+	// Get the inputsf
 	let first = document.getElementById("firstName").value;
 	let last = document.getElementById("lastName").value;
 	let email = document.getElementById("emailAddress").value;
