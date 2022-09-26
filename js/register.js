@@ -44,14 +44,14 @@ function doRegister()
   	}
 	
 	// Check if username length greater than 5 characters
-	if (userName.length <= 5) {
+	if (userName.length <= 7) {
 		document.getElementById("registerResult").innerHTML = "Username must be greater than 5 characters.";
 		document.getElementById("registerResult").style.color = '#E02745';
 		return;
 	}
 	
 	// Check if password length greater than 7 characters
-	if (password.length <= 7) {
+	if (password.length <= 8) {
 		document.getElementById("registerResult").innerHTML = "Password must be greater than 7 characters.";
 		document.getElementById("registerResult").style.color = '#E02745';
 		return;
